@@ -49,13 +49,13 @@ class Data{
 vector <Data> collectionData;
 vector <Data> sortData;
 
-void loadData(string fileName){
+void loadData(char* fileName){
 	int count;
 	int i = 1;
 	int tmpNumber;
 	Data tmp;
 	ifstream file;
-	file.open(fileName.c_str());
+	file.open(fileName);
 	if( !file.good()){
 		exit(1);
 	}
@@ -80,7 +80,7 @@ void sortTasks(){
 	}
 }
 
-void executeTasks(){
+int executeTasks(){
 	int cMax = 0;
 	int currentTime = 0;
 	int timeAfterLastFinishedTask = 0;
@@ -91,12 +91,23 @@ void executeTasks(){
 		cMax = max(cMax, (startTimeAnotherTask + sortData[i].getP() + sortData[i].getQ()));
 		//cout << startTimeAnotherTask << endl;
 	}
-	cout << cMax << endl;
+	return cMax;
 }
 
 int main(){
-	loadData("data1.txt");
-	sortTasks();
-	executeTasks();
+	char fileName[20];
+	int cMax;
+	int cMaxAssume = 0;
+	for(int i = 1; i <= 4; i++ ){
+		sprintf(fileName, "data%d.txt" ,i);
+		loadData(fileName);
+		sortTasks();
+		cMax = executeTasks();
+		cout << "dane" << i <<": " << cMax << "\t"; 
+		cMaxAssume += cMax;
+		collectionData.clear();
+		sortData.clear();	
+	}
+	cout << "\nsuma: " << cMaxAssume << endl;
 	return 0;
 }
