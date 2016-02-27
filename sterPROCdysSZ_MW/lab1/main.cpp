@@ -54,10 +54,23 @@ void loadData(char* fileName){
 	file.close();
 }
 
-void sortTasks(){
+struct less_than_key
+{
+    bool operator() (Data data1, Data data2)
+    {
+        return ((data1.getR()) < (data2.getR()));
+    }
+};
+
+void sortTasks123(){
 	for(int i = 0; i < collectionData.size(); i++){
 		sortData.push_back(collectionData[i]);
 	}
+}
+
+void sortTasks2(){
+  sortData = collectionData;
+	sort(sortData.begin(), sortData.end(), less_than_key());
 }
 
 int executeTasks(){
@@ -81,7 +94,7 @@ int main(){
 	for(int i = 1; i <= 4; i++ ){
 		sprintf(fileName, "data%d.txt" ,i);
 		loadData(fileName);
-		sortTasks();
+		sortTasks2();
 		cMax = executeTasks();
 		cout << "dane" << i <<": " << cMax << "\t"; 
 		cMaxAssume += cMax;
