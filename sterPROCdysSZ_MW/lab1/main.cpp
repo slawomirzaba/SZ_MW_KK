@@ -83,7 +83,7 @@ struct less_than_key
 {
     bool operator() (Data data1, Data data2)
     {
-        if ( ( (  data1.getR() - 2 * data1.getQ() ) - data1.getP() ) < ( (  data2.getR() - 2 * data2.getQ() )  - data2.getP() ) ){
+        if ( data1.getR()  < data2.getR() ){
         	return true;
 		}
     }
