@@ -3,13 +3,10 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <algorithm>
+
 using namespace std;
 
-int max(int a, int b){
-	if(a > b)
-		return a;
-	return b;
-}
 class Data{
 	private:
 		int r;
@@ -17,33 +14,16 @@ class Data{
 		int q;
 		int taskNumber;
 	public:
-		Data(){
-			r = p = q = 0;
-		}
-		void setR(int r){
-			this -> r = r;
-		}
-		void setP(int p){
-			this -> p = p;
-		}
-		void setQ(int q){
-			this -> q = q;
-		}
-		void setTaskNumber(int nr){
-			this -> taskNumber = nr;
-		}
-		int getR(){
-			return r;
-		}
-		int getP(){
-			return p;
-		}
-		int getQ(){
-			return q;
-		}
-		int getTaskNumber(){
-			return taskNumber;
-		}
+		Data(){ r = p = q = 0; }
+
+		void setR(int r){ this -> r = r; }
+		void setP(int p){ this -> p = p; }
+		void setQ(int q){ this -> q = q; }
+		int getR(){ return r; }
+		int getP(){ return p; }
+		int getQ(){ return q; }
+		int getTaskNumber(){ return taskNumber; }
+		void setTaskNumber(int nr){ this -> taskNumber = nr; }
 };
 
 vector <Data> collectionData;
@@ -57,7 +37,7 @@ void loadData(char* fileName){
 	ifstream file;
 	file.open(fileName);
 	if( !file.good()){
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	file >> count;
 	while(!file.eof()){
