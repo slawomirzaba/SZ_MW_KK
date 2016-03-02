@@ -28,6 +28,7 @@ class Data{
 
 vector <Data> collectionData;
 vector <Data> sortData;
+vector <Data> ready;
 
 void loadData(char* fileName){
 	int count;
@@ -54,8 +55,22 @@ void loadData(char* fileName){
 	file.close();
 }
 
+int minP(vector <Data> vec){
+	int min = 1000000;
+	for(int i = 0; i < vec.size(); i++){
+		if(vec[i].getP() < min){
+			min = vec[i].getP();
+		}
+	}
+	for(int i = 0; i < vec.size(); i++){
+		if(vec[i].getP() == min){
+			return i;
+		}
+	}
+}
+
 int minR(vector <Data> vec){
-	int min = 10000;
+	int min = 1000000;
 	for(int i = 0; i < vec.size(); i++){
 		if(vec[i].getR() < min){
 			min = vec[i].getR();
@@ -80,29 +95,29 @@ int maxQ(vector <Data> vec){
 		}
 	}
 }
-
-struct less_than
-{
-    bool operator() (Data data1, Data data2)
-    {
-        if ( data1.getR()  < data2.getR() ){
-        	return true;
+int findIndexByTaskNumber(vector <Data> vec, int nr){
+	for(int i = 0; i < vec.size(); i++){
+		if(vec[i].getTaskNumber() == nr){
+			return i;
 		}
-    }
-};
-
-void sortTasks123(){
-	for(int i = 0; i < collectionData.size(); i++){
-		sortData.push_back(collectionData[i]);
 	}
 }
-
-void sortR(){
-  sortData = collectionData;
-	sort(sortData.begin(), sortData.end(), less_than());
+int getTaskIndexWithMaxQAndMinP(vector <Data> vec){
+	vector <Data> tmp;
+	int max = -1;
+	for(int i = 0; i < vec.size(); i++){
+		if(vec[i].getQ() > max){
+			max = vec[i].getQ();
+		}
+	}
+	for(int i = 0; i < vec.size(); i++){
+		if(vec[i].getQ() == max){
+			tmp.push_back(vec[i]);
+		}
+	}
+	return findIndexByTaskNumber(vec, tmp[minP(tmp)].getTaskNumber());
 }
-
-int shrage(){
+void shrage(){
 	int indexR, indexQ;
 	int t = 0, cMax = 0;
 	Data e;
@@ -114,26 +129,26 @@ int shrage(){
 		}
 		if( sortData.empty() ){
 			t =  collectionData[indexR = minR(collectionData)].getR();
-			continue;
 		}
-		e = sortData[indexQ = maxQ(sortData)];
-		sortData.erase(sortData.begin() + indexQ);
+		else{
+			e = sortData[indexQ = getTaskIndexWithMaxQAndMinP(sortData)];
+			cout << e.getTaskNumber() << endl;
+			ready.push_back(e);
+			sortData.erase(sortData.begin() + indexQ);
+		}
 		t += e.getP();
-		cMax = max(cMax, t + e.getQ());
 	}
-	return cMax;
 }
-
 
 int executeTasks(){
 	int cMax = 0;
 	int currentTime = 0;
 	int timeAfterLastFinishedTask = 0;
 	int startTimeAnotherTask;
-	for(int i = 0; i < sortData.size(); i++){
-		startTimeAnotherTask = max(timeAfterLastFinishedTask, sortData[i].getR());
-		timeAfterLastFinishedTask = startTimeAnotherTask + sortData[i].getP();
-		cMax = max(cMax, (startTimeAnotherTask + sortData[i].getP() + sortData[i].getQ()));
+	for(int i = 0; i < ready.size(); i++){
+		startTimeAnotherTask = max(timeAfterLastFinishedTask, ready[i].getR());
+		timeAfterLastFinishedTask = startTimeAnotherTask + ready[i].getP();
+		cMax = max(cMax, (startTimeAnotherTask + ready[i].getP() + ready[i].getQ()));
 	}
 	return cMax;
 }
@@ -145,11 +160,14 @@ int main(){
 	for(int i = 1; i <= 4; i++ ){
 		collectionData.clear();
 		sortData.clear();	
+		ready.clear();
 		sprintf(fileName, "data%d.txt" ,i);
 		loadData(fileName);
-		cMax = shrage();
+		shrage();
+		cMax = executeTasks();
 		cout << "dane" << i <<": " << cMax << "\t"; 
 		cMaxAssume += cMax;
+		system("pause");
 	}
 	cout << "\nsuma: " << cMaxAssume << endl;
 	
