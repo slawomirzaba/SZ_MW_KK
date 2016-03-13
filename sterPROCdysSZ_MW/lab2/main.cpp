@@ -33,12 +33,6 @@ void loadData(string fileName){
   file.close();
 }
 
-void displayData(){
-  for(int i = 0; i < n; i++){
-    cout << tabData[i].p << " " << tabData[i].w  << " " <<  tabData[i].d << endl;
-  }
-}
-
 int main(){
   int cMax = 0, j = 1, u;
   int tmp, tmp2;
@@ -61,10 +55,10 @@ int main(){
       tmp = j;
       while( tmp > 0){
         if(tmp & 1){
-          if(F[j] > F[ j - int(pow(2, tmp2))] + max(0, cMax - tabData[tmp2].d) * tabData[tmp2].w){
+          if(F[j] >= F[ j - int(pow(2, tmp2))] + max(0, cMax - tabData[tmp2].d) * tabData[tmp2].w){
             u = tmp2;
-          }
             F[j] = min(F[j], F[ j - int(pow(2, tmp2))] + max(0, cMax - tabData[tmp2].d) * tabData[tmp2].w );
+          }
         }
         tmp /= 2;
         tmp2++;
@@ -72,12 +66,15 @@ int main(){
       q[j] = u;
     }
   }
+  j -= 1;
   tmp = n;
-  while (tmp) {
-  que[tmp--]=tmp2=q[j] + 1;
-  j=j-(1uL<<(tmp2-1)); }
+  while (tmp >= 0) {
+  que[tmp--] = tmp2 = q[j] + 1;
+  j = j - pow(2, tmp2-1);
+}
   for(int i = 0; i < n; i++){
-    cout << que[i];
+    cout << que[i] << " ";
   }
+  cout << endl << F[N-1] << endl;
   return 0;
 }
