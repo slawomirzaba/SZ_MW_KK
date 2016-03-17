@@ -12,9 +12,11 @@
 
 using namespace std;
 
+char **characters_table;
 list<string> text_lines;
 vector<int> alphabet;
 vector<char> key;
+
 
 void loadData()
 {
@@ -71,7 +73,7 @@ void generateASCIITable()
 	file.open(ABC);
 	if(!file.good())
 		exit(EXIT_FAILURE);
-	for(int i = 0; i < 256; ++i)
+	for(int i = 33; i < 126; ++i)
 		file << i << " ";
 	file.close();
 }
@@ -115,8 +117,8 @@ void askSecondQuestion()
 			case 1:
 				do // losowanie autoklucza z zakresu malych i duzych liter
 				{
-				 	number = rand() % 256;
-				} while(number < 65 || number > 122 || (number > 90 && number < 97));
+				 	number = rand() % 128;
+				} while(number < 33 || number > 126);
 				autokey = number;
 				cout << "Znak '" << autokey << "' zostal wylosowany jako autoklucz\n";
 				key.push_back(autokey);
@@ -132,26 +134,177 @@ void askSecondQuestion()
 	} while(second_answer != 1 && second_answer != 2);
 }
 
+void prepareTable()
+{
+	int index;
+
+	characters_table = new char* [alphabet.size()];
+	for(int i = 0; i < alphabet.size(); ++i)
+		characters_table[i] = new char [alphabet.size()];
+
+	for(int i = 0; i < alphabet.size(); ++i)
+	{
+		index = 0;
+		for(int j = i; j < alphabet.size(); ++j)
+		{
+			if(j == alphabet.size() - 1)
+			{
+				characters_table[i][index++] = alphabet[j];
+				for(j = 0; j < i; ++j)
+				{
+					characters_table[i][index++] = alphabet[j];
+				}
+				break;
+			}
+			characters_table[i][index++] = alphabet[j];
+		}
+	}
+}
+
 void showMenu()
 {
 	cout << "Lab 2 E-media Szyfr Vigenere'a\n";
 	askFirstQuestion();
 	cout << "\nMENU:\n";
 	askSecondQuestion();
+	prepareTable();
 }
 
-void encryptData()
+string createKeyWord(const string &text_line)
 {
-	
+	int next = 1;
+	string key_word = "";
+	int key_size = key.size();
+
+
+	if(key_size == 1)
+	{
+		key_word += key[0];
+		for(int i = 0; i < text_line.length() - 1;)
+		{
+			if(text_line[i+next] != ' ')
+			{
+				if(text_line[i] == ' ')
+				{
+					i++;
+					next--;
+				}
+				key_word += text_line[i++];
+			}
+			else
+			{
+				key_word += ' ';
+				next++;	
+			}
+		}
+	}
+	else
+	{
+		for(int i = 0, j = 0; i < text_line.length(); ++i, ++j)
+		{
+			j = j % key_size;
+			if(text_line[i] != ' ')
+				key_word += key[j];
+			else
+			{
+				key_word += ' ';
+				j--;
+			}
+		}
+	}
+	return key_word;
+}
+
+int findCharactersIndex(const char &character)
+{
+	int index = 0;
+
+	for(int i = 0; i < alphabet.size(); ++i)
+	{
+		if(characters_table[0][i] == character)
+			return index;
+		index++;
+	}
+}
+
+string invertKeyWord(const string &key_word)
+{
+	int index;
+	char wanted_sign;
+	string inverted_key_word = "";
+
+	for(int i = 0; i < key_word.length(); ++i)
+	{
+		if(key_word[i] == ' ')
+			inverted_key_word += ' ';
+		else
+		{
+			index = findCharactersIndex(key_word[i]);
+			wanted_sign = alphabet[(alphabet.size() - index) % alphabet.size()];
+			inverted_key_word += wanted_sign;
+		}
+	}
+	return inverted_key_word;
+}
+
+bool existsInAlphabet(const char &sign)
+{
+	for(int i = 0; i < alphabet.size(); ++i)
+	{
+		if(int(sign) == alphabet[i])
+			return true;
+	}
+	return false;
+}
+
+string encryptData(const string &data, const string &key_word)
+{
+	int row, column;
+	string cryptogram = "";
+
+	for(int i = 0; i < data.length(); ++i)
+	{
+		if(data[i] == ' ')
+			cryptogram += ' ';
+		else
+		{
+			if(!existsInAlphabet(data[i]))
+			{
+				cryptogram += data[i];
+				continue;
+			}
+			row = findCharactersIndex(data[i]);
+			column = findCharactersIndex(key_word[i]);
+			cryptogram += characters_table[row][column];
+		}
+	}
+	return cryptogram;
 }
 
 int main()
 {
+	string cryptogram, key_word;
+
 	srand(time(NULL));
 	loadData();
 	showMenu();
-	encryptData();
-	decryptData();
-
+	for(list<string>::iterator iter = text_lines.begin(); iter != text_lines.end(); ++iter)
+	{
+		cryptogram = "";
+		key_word = createKeyWord(*iter);
+		cryptogram = encryptData(*iter, key_word);
+		cout.width(22);
+		cout << right << "Tekst jawny: " << *iter << endl;
+		cout.width(22);
+		cout << right << "Klucz: " << key_word << endl;
+		cout.width(22);
+		cout << right << "Tekst zaszyfrowany: " << cryptogram << endl;
+		key_word = invertKeyWord(key_word);
+		cout.width(22);
+		cout << right << "Tekst odszyfrowany: " << encryptData(cryptogram, key_word) << endl;
+	}
+	for(int i = 0; i < alphabet.size(); ++i)
+		delete [] characters_table[i];
+	delete [] characters_table;
 	return EXIT_SUCCESS;
 }
