@@ -1,0 +1,34 @@
+{% extends "mainPage/base.html" %}
+{% block title %} HomePage {% endblock %}
+
+{%block content %}
+
+<table class="table table-bordered pduTable" ng-repeat="pdu in arrayPdu">
+    <tbody>
+      <tr>
+        <td style="text-align:center"><span class="tablePduHeader">PDU Name:</span> {[{pdu.name}]} </td>
+        <td style="text-align:center"><span class="tablePduHeader">slots:</span> {[{pdu.slots}]}</td>
+        <td colspan="4"><span class="tablePduHeader">Description:</span> {[{pdu.descr}]}</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:center;vertical-align:middle;"><span class="tablePduHeader">Ip:</span> {[{pdu.ip}]}</td>
+        <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
+        <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
+        <td style="text-align:center"><button type="button" class="btn btn-primary">Reboot</button></td>
+        <td style="text-align:center;width:24%"><button ng-click="tooglePduInformations(pdu);" type="button" class="btn btn-info"> {[{pdu.dispMoreInfo == false? "Display more info": "Hide more info"}]}</button></td>
+      </tr>
+      <tr ng-show="pdu.dispMoreInfo == true" ng-repeat-start = "slot in pdu.arraySlots">
+        <td colspan="5" style="text-align:center;background-color: D2E7FC;"> <span class="tablePduHeader">Slot {[{slot.id}]}:</span> {[{slot.state}]}</td>
+        <td rowspan="2"> <span class="tablePduHeader">Description: </span>{[{slot.descr}]}</td>
+      </tr>
+      <tr ng-show="pdu.dispMoreInfo == true" ng-repeat-end>
+        <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
+        <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
+        <td style="text-align:center"> <button type="button" class="btn btn-primary">Reboot</button></td>
+        <td style="text-align:center"><button type="button" class="btn btn-info">Check state</button></td>
+        <td style="text-align:center"><button type="button" class="btn btn-warning">Add to group</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+{% endblock %}

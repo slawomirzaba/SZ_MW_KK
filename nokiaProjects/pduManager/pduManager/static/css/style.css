@@ -1,0 +1,28 @@
+.remove{
+  float: right;
+}
+
+.navbar-brand{
+  padding: 5px 15px;
+}
+
+.pduTable{
+  margin-top:10px;
+  margin-bottom:50px;
+}
+
+.tablePduHeader{
+  font-weight: bold;
+}
+
+.checkbox{
+  display:inline-block;
+  width:24%;
+}
+
+.barGroups.open .showMenuAddingGroup{
+  display:block !important;
+}
+.barGroups .showMenuAddingGroup{
+  display:none !important;
+}
