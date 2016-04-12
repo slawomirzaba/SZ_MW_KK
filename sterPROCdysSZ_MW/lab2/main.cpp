@@ -112,6 +112,7 @@ int main(){
     cout << "czas wykonania: " << t << endl << endl;
   }
   cout << "laczny czas: " << allTime <<endl;
+  system("pause");
   delete [] tabData;
   delete [] queue;
   delete [] tabIndexes;
