@@ -70,6 +70,50 @@ pduApp.controller('mainController', function ($scope) {
       ]
     }
   ];
+  $scope.isInArrayNewGroup = function(pduId){
+    for(var i = 0; i < $scope.newGroup.properties.length; ++i){
+      if($scope.newGroup.properties[i].pduId == pduId){
+        return i;
+      }
+    }
+    return -1;
+  }
+  $scope.selectPduToGroup = function(pdu, slot){
+    if(slot.selected == true)
+    {
+      index = $scope.isInArrayNewGroup(pdu.id);
+      if(index != -1)
+      {
+        $scope.newGroup.properties[index].slots.push(slot.id);
+      }
+      else
+      {
+          var element = {
+          pduId: pdu.id,
+          slots: [slot.id]
+        }
+        $scope.newGroup.properties.push(element);
+      }
+    }
+    else
+    {
+      for( var i = 0; i < $scope.newGroup.properties.length; ++i)
+      {
+        for ( var j = 0; j < $scope.newGroup.properties[i].slots.length; ++j)
+        {
+          if($scope.newGroup.properties[i].pduId == pdu.id && $scope.newGroup.properties[i].slots[j] == slot.id)
+          {
+            $scope.newGroup.properties[i].slots.splice(j, 1);
+            if($scope.newGroup.properties[i].slots.length == 0){
+              $scope.newGroup.properties.splice(i, 1);
+            }
+            break;
+          }
+        }
+      }
+    }
+  }
+
   $scope.selectLabelAdiingGroup = function(pdu){
     $scope.selectedLabel = pdu.id;
   }
@@ -83,8 +127,9 @@ pduApp.controller('mainController', function ($scope) {
 
   $scope.createEmptyGroup = function(){
     $scope.newGroup = {
+      allDevices: angular.copy($scope.arrayPdu),
       name: "",
-      properties: angular.copy($scope.arrayPdu)
+      properties: []
     }
     $scope.selectedLabel = $scope.arrayPdu[0].id;
 
@@ -93,8 +138,8 @@ pduApp.controller('mainController', function ($scope) {
     console.log($scope.newGroup);
     var element = {
       id: $scope.maxId + 1,
-      name: $scope.newGroup.name,
-      pdus: $scope.newGroup.properties
+      name: angular.copy($scope.newGroup.name),
+      pdus: angular.copy($scope.newGroup.properties)
     }
     $scope.groups.push(element);
   }
@@ -113,6 +158,6 @@ pduApp.controller('mainController', function ($scope) {
         $scope.groups.splice(i, 1);
         break;
       }
-    }   
+    }
   }
 });
