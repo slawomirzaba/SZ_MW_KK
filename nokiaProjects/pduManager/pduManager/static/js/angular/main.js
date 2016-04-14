@@ -7,20 +7,10 @@ pduApp.config(function($interpolateProvider) {
 pduApp.controller('mainController', function ($scope) {
   $scope.groups = [
     {
-      id: 1,
-      name: "group1",
+      id: 0,
+      name: "all",
       pdus: []
-    },
-    {
-      id: 2,
-      name: "group2",
-      pdus: []
-      },
-      {
-        id: 3,
-        name: "group3",
-        pdus: []
-        }
+    }
   ]
 
   $scope.arrayPdu = [
@@ -70,6 +60,45 @@ pduApp.controller('mainController', function ($scope) {
       ]
     }
   ];
+  
+  $scope.selectedGroup = $scope.groups[0];
+  $scope.selectGroup = function(id){
+    for(var i = 0; i < $scope.groups.length; i++){
+      if($scope.groups[i].id == id){
+        $scope.selectedGroup = $scope.groups[i];
+        break;
+      }
+    }
+  }
+  $scope.isPduinGroup = function(pduId){
+    if($scope.selectedGroup.name == "all" && $scope.selectedGroup.id ==  0){
+      return true;
+    }
+    for(var i = 0; i < $scope.selectedGroup.pdus.length; i++){
+      if($scope.selectedGroup.pdus[i].pduId == pduId)
+        return true;
+    }
+    return false;
+  }
+  $scope.isSlotinGroup = function(pduId, slotId){
+    if($scope.selectedGroup.name == "all" && $scope.selectedGroup.id ==  0){
+      return true;
+    }
+    for(var i = 0; i < $scope.selectedGroup.pdus.length; i++){
+      if($scope.selectedGroup.pdus[i].pduId == pduId)
+      {
+        index = i;
+        break;
+      }
+    }
+    for(var j = 0; j < $scope.selectedGroup.pdus[index].slots.length; ++j){
+      if($scope.selectedGroup.pdus[index].slots[j] == slotId){
+        return true;
+      }
+    }
+    return false;
+  }
+
   $scope.isInArrayNewGroup = function(pduId){
     for(var i = 0; i < $scope.newGroup.properties.length; ++i){
       if($scope.newGroup.properties[i].pduId == pduId){
@@ -137,17 +166,17 @@ pduApp.controller('mainController', function ($scope) {
   $scope.createNewGroup = function(){
     console.log($scope.newGroup);
     var element = {
-      id: $scope.maxId + 1,
+      id: $scope.maxId() + 1,
       name: angular.copy($scope.newGroup.name),
       pdus: angular.copy($scope.newGroup.properties)
     }
     $scope.groups.push(element);
   }
-  $scope.maxId = function(array){
+  $scope.maxId = function(){
     var max = -1;
-    for(var i = 0; i < array.size; i++){
-      if(array[i].id > max){
-        max = array[i].id;
+    for(var i = 0; i < $scope.groups.length; i++){
+      if($scope.groups[i].id > max){
+        max = $scope.groups[i].id;
       }
     }
     return max;

@@ -3,7 +3,7 @@
 
 {%block content %}
 
-<table class="table table-bordered pduTable" ng-repeat="pdu in arrayPdu">
+<table class="table table-bordered pduTable" ng-repeat="pdu in arrayPdu" ng-if="isPduinGroup(pdu.id)">
     <tbody>
       <tr>
         <td style="text-align:center"><span class="tablePduHeader">PDU Name:</span> {[{pdu.name}]} </td>
@@ -17,11 +17,11 @@
         <td style="text-align:center"><button type="button" class="btn btn-primary">Reboot</button></td>
         <td style="text-align:center;width:24%"><button ng-click="tooglePduInformations(pdu);" type="button" class="btn btn-info"> {[{pdu.dispMoreInfo == false? "Display more info": "Hide more info"}]}</button></td>
       </tr>
-      <tr ng-show="pdu.dispMoreInfo == true" ng-repeat-start = "slot in pdu.arraySlots">
+      <tr ng-show="pdu.dispMoreInfo == true && isSlotinGroup(pdu.id, slot.id)" ng-repeat-start = "slot in pdu.arraySlots">
         <td colspan="5" style="text-align:center;background-color: D2E7FC;"> <span class="tablePduHeader">Slot {[{slot.id}]}:</span> {[{slot.state}]}</td>
         <td rowspan="2"> <span class="tablePduHeader">Description: </span>{[{slot.descr}]}</td>
       </tr>
-      <tr ng-show="pdu.dispMoreInfo == true" ng-repeat-end>
+      <tr ng-show="pdu.dispMoreInfo == true && isSlotinGroup(pdu.id, slot.id)" ng-repeat-end>
         <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
         <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
         <td style="text-align:center"> <button type="button" class="btn btn-primary">Reboot</button></td>

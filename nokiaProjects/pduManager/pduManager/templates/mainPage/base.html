@@ -57,13 +57,13 @@
               <div class="sidebar-nav navbar-collapse">
                   <ul class="nav" id="side-menu">
                       <li>
-                          <a href="#"><i class="fa fa-globe fa-fw"></i> All PDU devices</a>
+                          <a href="#" ng-click="selectGroup(0)"><i class="fa fa-globe fa-fw"></i> All PDU devices</a>
                       </li>
                       <li>
                           <a href="#"><i class="fa fa-object-group"></i> Groups <span class="fa arrow"></span></a>
                           <ul class="nav nav-second-level">
                               <li ng-repeat="group in groups">
-                                  <a href="#">{[{group.name}]} <i ng-click="removeGroup(group.id)" class="fa fa-trash remove"></i> </a>
+                                  <a ng-show="group.name != 'all' && group.id != 0" href="#" ng-click="selectGroup(group.id)">{[{group.name}]} <i ng-click="removeGroup(group.id)" class="fa fa-trash remove"></i> </a>
                               </li>
                           </ul>
                       </li>
