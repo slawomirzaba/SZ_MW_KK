@@ -14,7 +14,9 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-  <script src="{% static 'js/angular/main.js' %}"></script></head>
+  <script src = "{% static 'js/angular/ui-bootstrap-tpls-0.2.0.js' %}"></script>
+  <script src = "{% static 'js/angular/main.js' %}"></script>
+</head>
 <body ng-app = "pduApp" ng-controller = "mainController" ng-init="init()">
 
   <div id="wrapper">
@@ -34,7 +36,7 @@
 
           <ul class="nav navbar-top-links navbar-right">
               <li>
-                <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                <a href="#" ng-click="test()"><i class="fa fa-gear fa-fw"></i> Settings</a>
               </li>
               <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">

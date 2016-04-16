@@ -13,8 +13,11 @@
 
 .tablePduHeader{
   font-weight: bold;
+  display:block;
 }
-
+.tablePduHeader.tableIP{
+	display:inline-block;
+}
 .checkbox{
   display:inline-block;
   width:24%;
@@ -25,4 +28,25 @@
 }
 .barGroups .showMenuAddingGroup{
   display:none !important;
+}
+
+.fa-check{
+	margin-left: 10px;
+	color: green;
+	float: right;
+}
+
+.fa-pencil{
+	color: blue;
+	float: right;
+
+
+}
+
+.fa-ban{
+	color: red;
+	float: right;
+}
+textarea.pduDesc{
+	width: 90%;
 }

@@ -4,6 +4,16 @@ pduApp.config(function($interpolateProvider) {
   $interpolateProvider.endSymbol('}]}');
 });
 
+pduApp.filter('startFrom', function() {
+    return function(input, start) {
+        if(input) {
+            start = +start; //parse to int
+            return input.slice(start);
+        }
+        return [];
+    }
+});
+
 pduApp.controller('mainController', function ($scope) {
 
   $scope.arrayPdu = [
@@ -51,6 +61,31 @@ pduApp.controller('mainController', function ($scope) {
           descr: "fajny socket"
         }
       ]
+    },
+    {
+      id: "3",
+      name: "PDU 3",
+      ip: "192.168.1.23",
+      slots: "3",
+      descr: "fajne PDU",
+      dispMoreInfo: false,
+      arraySlots: [
+        {
+          id: "1",
+          state: "active",
+          descr: "fajny socket"
+        },
+        {
+          id: "2",
+          state: "disable",
+          descr: "fajny socket"
+        },
+        {
+          id: "3",
+          state: "active",
+          descr: "fajny socket"
+        }
+      ]
     }
   ];
 
@@ -64,6 +99,11 @@ pduApp.controller('mainController', function ($scope) {
 
   $scope.init = function(){
     $scope.selectGroup(0);
+    $scope.filteredPdus = $scope.groups[0].allDevices;
+    $scope.currentPage = 1; //current page
+    $scope.entryLimit = 1; //max rows for data table
+    $scope.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.entryLimit);
+    $scope.limitPages = 5;
   }
   $scope.selectGroup = function(id){
     if(id == 0){
@@ -131,5 +171,40 @@ pduApp.controller('mainController', function ($scope) {
         break;
       }
     }
+  }
+  $scope.test = function(){
+    console.log($scope.filteredPdus);
+  }
+
+    /* init pagination with $scope.list */
+  $scope.getNumberPages = function() {
+    return new Array($scope.noOfPages);   
+  }
+  $scope.changePage = function(page){
+    if(page <= $scope.noOfPages && page > 0){
+      $scope.currentPage = page;
+    }
+  }
+  $scope.$watchCollection('filteredPdus', function listener(nVal, oVal){
+    if (nVal != oVal){
+      $scope.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.entryLimit);
+      $scope.currentPage = 1;
+    }
+  })
+  $scope.editPduDescr = function(id){
+    $scope.editedPdu = id;
+  }
+  $scope.confirmDescr = function(pdu){
+    $scope.editedPdu = undefined;
+    angular.forEach($scope.groups, function(g, i){
+      angular.forEach(g.allDevices, function(d, j){
+        if(d.id == pdu.id){
+          d.descr = pdu.descr;
+        }
+      });
+    });
+  }
+  $scope.rejectDescr = function(id){
+    $scope.editedPdu = undefined;
   }
 });
