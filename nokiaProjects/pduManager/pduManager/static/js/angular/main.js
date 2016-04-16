@@ -135,10 +135,16 @@ pduApp.controller('mainController', function ($scope) {
   $scope.createEmptyGroup = function(){
     $scope.newGroup = {
       id: $scope.maxId() + 1,
-      allDevices: angular.copy($scope.arrayPdu),
+      allDevices: angular.copy($scope.groups[0].allDevices),
       name: ""
     }
-    $scope.selectedLabel = $scope.arrayPdu[0].id;
+    angular.forEach($scope.newGroup.allDevices, function(d, i){
+      d.selected = false;
+        angular.forEach(d.arraySlots, function(s, j){
+          s.selected = false;
+        });
+    })
+    $scope.selectedLabel = $scope.groups[0].allDevices[0].id;
   }
   $scope.addPduToGroup = function(pdu, slot){
     if(slot.selected == true){
@@ -194,11 +200,9 @@ pduApp.controller('mainController', function ($scope) {
   $scope.confirmDescr = function(pdu){
     $scope.editedPdu = undefined;
     angular.forEach($scope.groups, function(g, i){
-      angular.forEach(g.allDevices, function(d, j){
-        if(d.id == pdu.id){
-          d.descr = pdu.descr;
-        }
-      });
+      var index = g.allDevices.map(function(e) { return e.id; }).indexOf(pdu.id);
+      if (index != -1)
+        g.allDevices[index].descr = pdu.descr;
     });
   }
   $scope.rejectDescr = function(id){
@@ -211,5 +215,18 @@ pduApp.controller('mainController', function ($scope) {
   $scope.rejectSlotDescr = function(id){
     $scope.editedslot = undefined;
     $scope.editedSlotFromPdu = undefined;
+  }
+  $scope.confirmSlot = function(slot, pdu){
+    $scope.editedslot = undefined;
+    $scope.editedSlotFromPdu = undefined;
+    angular.forEach($scope.groups, function(g, i){
+      var index = g.allDevices.map(function(e) { return e.id; }).indexOf(pdu.id);
+      if (index != -1){
+        angular.forEach(g.allDevices[index].arraySlots, function(s, j){
+          if(slot.id == s.id)
+            s.descr = slot.descr;
+        });
+      }
+    });
   }
 });
