@@ -23,7 +23,6 @@ pduApp.controller('mainController', function ($scope) {
       ip: "192.168.1.1",
       slots: "2",
       descr: "fajne PDU",
-      dispMoreInfo: false,
       arraySlots: [
         {
           id: "1",
@@ -43,7 +42,6 @@ pduApp.controller('mainController', function ($scope) {
       ip: "192.168.1.21",
       slots: "3",
       descr: "fajne PDU",
-      dispMoreInfo: false,
       arraySlots: [
         {
           id: "1",
@@ -68,7 +66,6 @@ pduApp.controller('mainController', function ($scope) {
       ip: "192.168.1.23",
       slots: "3",
       descr: "fajne PDU",
-      dispMoreInfo: false,
       arraySlots: [
         {
           id: "1",
@@ -128,7 +125,7 @@ pduApp.controller('mainController', function ($scope) {
     $scope.selectedLabel = pdu.id;
   }
   $scope.tooglePduInformations = function(pdu){
-    if(pdu.dispMoreInfo == false){
+    if(pdu.dispMoreInfo != true){
       pdu.dispMoreInfo  = true;
     }else{
       pdu.dispMoreInfo  = false;
@@ -173,7 +170,7 @@ pduApp.controller('mainController', function ($scope) {
     }
   }
   $scope.test = function(){
-    console.log($scope.filteredPdus);
+    console.log($scope.groups[0].allDevices.map(function(e) { return e.id; }).indexOf('1'));
   }
 
     /* init pagination with $scope.list */
@@ -206,5 +203,13 @@ pduApp.controller('mainController', function ($scope) {
   }
   $scope.rejectDescr = function(id){
     $scope.editedPdu = undefined;
+  }
+  $scope.editSlotDescr = function(slotId, pduId){
+    $scope.editedslot = slotId;
+    $scope.editedSlotFromPdu = pduId;
+  }
+  $scope.rejectSlotDescr = function(id){
+    $scope.editedslot = undefined;
+    $scope.editedSlotFromPdu = undefined;
   }
 });

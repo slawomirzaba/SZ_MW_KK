@@ -25,11 +25,23 @@
         <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
         <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
         <td style="text-align:center"><button type="button" class="btn btn-primary">Reboot</button></td>
-        <td style="text-align:center;width:24%"><button ng-click="tooglePduInformations(pdu);" type="button" class="btn btn-info"> {[{pdu.dispMoreInfo == false? "Display more info": "Hide more info"}]}</button></td>
+        <td style="text-align:center;width:24%"><button ng-click="tooglePduInformations(pdu);" type="button" class="btn btn-info"> {[{pdu.dispMoreInfo != true? "Display more info": "Hide more info"}]}</button></td>
       </tr>
       <tr ng-show="pdu.dispMoreInfo" ng-repeat-start = "slot in pdu.arraySlots | filter:{selected:true}">
-        <td colspan="5" style="text-align:center;background-color: D2E7FC;"> <span class="tablePduHeader tableIP">Slot {[{slot.id}]}:</span> {[{slot.state}]}</td>
-        <td rowspan="2"> <span class="tablePduHeader">Description: </span>{[{slot.descr}]}</td>
+        <td colspan="5" style="text-align:center;background-color: D2E7FC;"> 
+          <span class="tablePduHeader tableIP">Slot {[{slot.id}]}:</span> {[{slot.state}]}
+        </td>
+        <td rowspan="2" ng-if="editedslot != slot.id || editedSlotFromPdu != pdu.id"> 
+          <span class="tablePduHeader">Description: 
+            <i ng-click = "editSlotDescr(slot.id, pdu.id)" class="fa fa-pencil" aria-hidden="true"></i>
+          </span>
+          <div style="display:inline-block; margin-right:25px;">{[{slot.descr}]}</div>
+        </td>
+        <td rowspan="2" ng-if="editedslot == slot.id && editedSlotFromPdu == pdu.id">
+          <textarea ng-model = "slot.descr" class = "slotDesc"></textarea>
+          <i ng-click="confirmSlot(slot, pdu)" class="fa fa-check" aria-hidden="true"></i>
+          <i ng-click="rejectSlotDescr(slot.id, pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
+        </td>
       </tr>
       <tr ng-show="pdu.dispMoreInfo" ng-repeat-end>
         <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
