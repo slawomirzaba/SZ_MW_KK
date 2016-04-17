@@ -100,10 +100,13 @@ pduApp.controller('mainController', function ($scope) {
   $scope.init = function(){
     $scope.selectGroup(0);
     $scope.filteredPdus = $scope.groups[0].allDevices;
-    $scope.currentPage = 1; //current page
-    $scope.entryLimit = 1; //max rows for data table
-    $scope.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.entryLimit);
-    $scope.limitPages = 5;
+    $scope.pagination = {
+      currentPage: 1,
+      entryLimit: 1,
+      noOfPages: 0,
+      limitPages: 5
+    };
+    $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
   }
   $scope.selectGroup = function(id){
     if(id == 0){
@@ -188,6 +191,7 @@ pduApp.controller('mainController', function ($scope) {
         break;
       }
     }
+    $scope.selectedGroup = $scope.groups[0];
   }
   $scope.test = function(){
     console.log($scope.groups[0].allDevices.map(function(e) { return e.id; }).indexOf('1'));
@@ -195,17 +199,23 @@ pduApp.controller('mainController', function ($scope) {
 
     /* init pagination with $scope.list */
   $scope.getNumberPages = function() {
-    return new Array($scope.noOfPages);   
+    return new Array($scope.pagination.noOfPages);   
   }
   $scope.changePage = function(page){
-    if(page <= $scope.noOfPages && page > 0){
-      $scope.currentPage = page;
+    if(page <= $scope.pagination.noOfPages && page > 0){
+      $scope.pagination.currentPage = page;
     }
   }
   $scope.$watchCollection('filteredPdus', function listener(nVal, oVal){
     if (nVal != oVal){
-      $scope.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.entryLimit);
-      $scope.currentPage = 1;
+      $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
+      $scope.pagination.currentPage = 1;
+    }
+  })
+  $scope.$watch('entryLimit', function listener(nVal, oVal){
+    if (nVal != oVal){
+      $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
+      //$scope.currentPage = 1;
     }
   })
   $scope.editPduDescr = function(pdu){

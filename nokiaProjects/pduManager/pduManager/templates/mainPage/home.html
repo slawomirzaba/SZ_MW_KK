@@ -3,7 +3,7 @@
 
 {%block content %}
 
-<table class="table table-bordered pduTable" ng-repeat="pdu in (filteredPdus = (selectedGroup.allDevices | filter:{selected:true})) | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+<table class="table table-bordered pduTable" ng-repeat="pdu in (filteredPdus = (selectedGroup.allDevices | filter:{selected:true})) | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit">
     <tbody>
       <tr>
         <td style="text-align:center"><span class="tablePduHeader">PDU Name:</span> {[{pdu.name}]} </td>
@@ -53,12 +53,25 @@
     </tbody>
   </table>
 
-  <ul class="pagination" ng-if="noOfPages > 1">
-  <li ng-click="changePage(1);" ng-class="{'disabled': currentPage == 1}"><a href="#">first</a></li>
-  <li ng-click="changePage(currentPage - 1);" ng-class="{'disabled': currentPage == 1}"><a href="#">«</a></li>
-  <li ng-click="changePage($index + 1);" ng-class="{'disabled': currentPage == $index + 1}" ng-repeat = "i in getNumberPages() | limitTo:limitPages track by $index "><a href="#">{[{$index + 1}]}</a></li>
-  <li ng-click="changePage(currentPage + 1);" ng-class="{'disabled': currentPage == noOfPages}"><a href="#">»</a></li>
-  <li ng-click="changePage(noOfPages);" ng-class="{'disabled': currentPage == noOfPages}"><a href="#">last</a></li>
+  <ul class="pagination" ng-if="pagination.noOfPages > 1">
+  <li ng-click="changePage(1);" ng-class="{'disabled': pagination.currentPage == 1}">
+    <a href="#">first</a>
+  </li>
+  <li ng-click="changePage(pagination.currentPage - 1);" ng-class="{'disabled': pagination.currentPage == 1}">
+    <a href="#">«</a>
+  </li>
+  <li ng-click="changePage($index + 1);" ng-class="{'disabled': pagination.currentPage == $index + 1}" ng-repeat = "i in getNumberPages() | limitTo:pagination.limitPages track by $index ">
+    <a href="#">{[{$index + 1}]}</a>
+  </li>
+  <li ng-click="changePage(pagination.currentPage + 1);" ng-class="{'disabled': pagination.currentPage == pagination.noOfPages}">
+    <a href="#">»</a>
+  </li>
+  <li ng-click="changePage(pagination.noOfPages);" ng-class="{'disabled': pagination.currentPage == pagination.noOfPages}">
+    <a href="#">last</a>
+  </li>
+  <li style="height:33px;">
+    <a>results on Page: <input class="pages" type="number" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
+  </li>
 </ul>
 
 {% endblock %}

@@ -67,3 +67,9 @@ textarea.slotDesc{
 .nav>li>a:hover{
 	background-color: #eee !important;
 }
+.pages{
+	border:none;
+	text-align:center;
+	width:50px;
+	height:19px;
+}
