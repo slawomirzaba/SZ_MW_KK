@@ -212,8 +212,11 @@ pduApp.controller('mainController', function ($scope) {
       $scope.pagination.currentPage = 1;
     }
   })
-  $scope.$watch('entryLimit', function listener(nVal, oVal){
+  $scope.$watch('pagination.entryLimit', function listener(nVal, oVal){
     if (nVal != oVal){
+      if($scope.pagination.entryLimit < 1){
+        $scope.pagination.entryLimit = 1;
+      }
       $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
       //$scope.currentPage = 1;
     }
