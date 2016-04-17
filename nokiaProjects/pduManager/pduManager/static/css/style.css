@@ -58,3 +58,12 @@ textarea.slotDesc{
 .fa{
 	cursor:pointer;
 }
+.selectedGroup{
+	background-color: #eee;
+}
+.nav>li>a:focus{
+	background-color: transparent;
+}
+.nav>li>a:hover{
+	background-color: #eee !important;
+}

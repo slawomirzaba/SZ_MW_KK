@@ -15,7 +15,10 @@ pduApp.filter('startFrom', function() {
 });
 
 pduApp.controller('mainController', function ($scope) {
-
+  $scope.descr = {
+    editedPduDescrText: "",
+    editedSlotDescrText: ""
+  }
   $scope.arrayPdu = [
     {
       id: "1",
@@ -133,6 +136,7 @@ pduApp.controller('mainController', function ($scope) {
   }
 
   $scope.createEmptyGroup = function(){
+    $scope.modeGroup = "add";
     $scope.newGroup = {
       id: $scope.maxId() + 1,
       allDevices: angular.copy($scope.groups[0].allDevices),
@@ -155,7 +159,17 @@ pduApp.controller('mainController', function ($scope) {
   }
 
   $scope.confirmGroup = function(){
-    $scope.groups.push($scope.newGroup);
+    if($scope.modeGroup == 'add'){
+      $scope.groups.push($scope.newGroup);
+    }
+    else if($scope.modeGroup == 'edit'){
+      for(var i = 0; i < $scope.groups.length; i++){
+        if($scope.groups[i].id == $scope.newGroup.id){
+          $scope.groups[i] = angular.copy($scope.newGroup);
+          break;
+        }
+      }
+    }
   }
 
   $scope.maxId = function(){
@@ -194,22 +208,24 @@ pduApp.controller('mainController', function ($scope) {
       $scope.currentPage = 1;
     }
   })
-  $scope.editPduDescr = function(id){
-    $scope.editedPdu = id;
+  $scope.editPduDescr = function(pdu){
+    $scope.descr.editedPduDescrText = angular.copy(pdu.descr);
+    $scope.editedPdu = pdu.id;
   }
   $scope.confirmDescr = function(pdu){
     $scope.editedPdu = undefined;
     angular.forEach($scope.groups, function(g, i){
       var index = g.allDevices.map(function(e) { return e.id; }).indexOf(pdu.id);
       if (index != -1)
-        g.allDevices[index].descr = pdu.descr;
+        g.allDevices[index].descr = $scope.descr.editedPduDescrText;
     });
   }
   $scope.rejectDescr = function(id){
     $scope.editedPdu = undefined;
   }
-  $scope.editSlotDescr = function(slotId, pduId){
-    $scope.editedslot = slotId;
+  $scope.editSlotDescr = function(slot, pduId){
+    $scope.descr.editedSlotDescrText = angular.copy(slot.descr);
+    $scope.editedslot = slot.id;
     $scope.editedSlotFromPdu = pduId;
   }
   $scope.rejectSlotDescr = function(id){
@@ -224,9 +240,14 @@ pduApp.controller('mainController', function ($scope) {
       if (index != -1){
         angular.forEach(g.allDevices[index].arraySlots, function(s, j){
           if(slot.id == s.id)
-            s.descr = slot.descr;
+            s.descr = $scope.descr.editedSlotDescrText 
         });
       }
     });
+  }
+  $scope.editGroup = function(group){
+    $scope.selectedLabel = $scope.groups[0].allDevices[0].id;
+    $scope.modeGroup = "edit";
+    $scope.newGroup = angular.copy(group);
   }
 });

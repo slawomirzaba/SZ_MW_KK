@@ -10,12 +10,12 @@
         <td style="text-align:center"><span class="tablePduHeader">slots:</span> {[{pdu.slots}]}</td>
         <td style ="max-width:800px" colspan="4" ng-if="editedPdu != pdu.id">
           <span class="tablePduHeader">Description: 
-            <i ng-click = "editPduDescr(pdu.id)" class="fa fa-pencil" aria-hidden="true"></i> 
+            <i ng-click = "editPduDescr(pdu)" class="fa fa-pencil" aria-hidden="true"></i> 
           </span>
           <div style="display:inline-block; margin-right:25px;">{[{pdu.descr}]}</div>
         </td>
         <td style="max-width:800px" colspan="4" ng-if="editedPdu == pdu.id">
-          <textarea ng-model = "pdu.descr" class = "pduDesc"></textarea>
+          <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
           <i ng-click="confirmDescr(pdu)" class="fa fa-check" aria-hidden="true"></i>
           <i ng-click="rejectDescr(pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
         </td>
@@ -33,12 +33,12 @@
         </td>
         <td rowspan="2" ng-if="editedslot != slot.id || editedSlotFromPdu != pdu.id"> 
           <span class="tablePduHeader">Description: 
-            <i ng-click = "editSlotDescr(slot.id, pdu.id)" class="fa fa-pencil" aria-hidden="true"></i>
+            <i ng-click = "editSlotDescr(slot, pdu.id)" class="fa fa-pencil" aria-hidden="true"></i>
           </span>
           <div style="display:inline-block; margin-right:25px;">{[{slot.descr}]}</div>
         </td>
         <td rowspan="2" ng-if="editedslot == slot.id && editedSlotFromPdu == pdu.id">
-          <textarea ng-model = "slot.descr" class = "slotDesc"></textarea>
+          <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
           <i ng-click="confirmSlot(slot, pdu)" class="fa fa-check" aria-hidden="true"></i>
           <i ng-click="rejectSlotDescr(slot.id, pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
         </td>
