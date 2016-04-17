@@ -164,6 +164,14 @@ pduApp.controller('mainController', function ($scope) {
   $scope.confirmGroup = function(){
     if($scope.modeGroup == 'add'){
       $scope.groups.push($scope.newGroup);
+      for(var i = 0; i < $scope.groups.length; ++i){
+        if($scope.groups[i].id == $scope.newGroup.id){
+          $scope.selectedGroup = $scope.groups[i];
+          break;
+        }
+      }
+      $('#menuGroups').addClass("active");
+      $('#secondLevelMenu').addClass('in');
     }
     else if($scope.modeGroup == 'edit'){
       for(var i = 0; i < $scope.groups.length; i++){
@@ -172,6 +180,8 @@ pduApp.controller('mainController', function ($scope) {
           break;
         }
       }
+      if($scope.groups[i].id == $scope.selectedGroup.id)
+        $scope.selectedGroup = $scope.groups[i];
     }
   }
 
