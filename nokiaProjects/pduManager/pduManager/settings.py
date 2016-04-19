@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -124,3 +126,45 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'django_auth_ldap.backend.LDAPBackend',
+]
+
+AUTH_LDAP_GLOBAL_OPTIONS = {    # Nie używamy TLS
+    ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER,
+    #    ldap.OPT_REFERRALS: False,
+}
+AUTH_LDAP_SERVER_URI = 'ldaps://ed-p-gl.emea.nsn-net.net' # Nokiowy serwer LDAP
+
+# AUTH_LDAP_START_TLS = True # Nie używamy TLS
+AUTH_LDAP_BIND_DN = ""  # Nie ma logowania
+AUTH_LDAP_BIND_PASSWORD = "" # Nie ma logowania
+AUTH_LDAP_USER_SEARCH = LDAPSearch("o=NSN", ldap.SCOPE_SUBTREE, "(uid=%(user)s)") # Kogo i gdzie ma wyszukiwać, 'uid' to login (czyli jeśli loguje się użytkownik to tu podkładany jest jego username i szukany jest w LDAPie
+# or perhaps:
+# AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=users,dc=example,dc=com" # Bo to co wyżej można też tak zrobić
+# Set up the basic group parameters.
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("o=NSN",
+                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+# Simple group restrictions
+# AUTH_LDAP_REQUIRE_GROUP = "cn=enabled,ou=django,ou=groups,dc=example,dc=com"
+# AUTH_LDAP_DENY_GROUP = "cn=disabled,ou=django,ou=groups,dc=example,dc=com"
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = { # Mapowanie pól z ldap na pola w modelu użytkownika Django
+    "first_name": "cn", # To tak na prawdę jest imie i nazwisko
+    "email": "mail",    # Mail 
+    "nsn_id": "employeeNumber" # nsn_id - pole dodane przez nas, ale może też je macie
+}
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {   # Gdybyśmy chcieli określać dostęp na podstawie LDAPowych grup to można je jakoś wyszukać i pomapować
+    #    "is_active": "cn=active,ou=django,ou=groups,dc=example,dc=com",
+    #    "is_staff": "cn=staff,ou=django,ou=groups,dc=example,dc=com",
+    #    "is_superuser": "cn=superuser,ou=django,ou=groups,dc=example,dc=com"
+}
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
