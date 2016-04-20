@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for pduManager project.
 
@@ -133,7 +134,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_LDAP_GLOBAL_OPTIONS = {    # Nie używamy TLS
-    ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER,
+#    ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER,
     #    ldap.OPT_REFERRALS: False,
 }
 AUTH_LDAP_SERVER_URI = 'ldaps://ed-p-gl.emea.nsn-net.net' # Nokiowy serwer LDAP
@@ -155,7 +156,7 @@ AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
 # Populate the Django user from the LDAP directory.
 AUTH_LDAP_USER_ATTR_MAP = { # Mapowanie pól z ldap na pola w modelu użytkownika Django
     "first_name": "cn", # To tak na prawdę jest imie i nazwisko
-    "email": "mail",    # Mail 
+    "email": "mail",    # Mail
     "nsn_id": "employeeNumber" # nsn_id - pole dodane przez nas, ale może też je macie
 }
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {   # Gdybyśmy chcieli określać dostęp na podstawie LDAPowych grup to można je jakoś wyszukać i pomapować
