@@ -19,5 +19,7 @@ from mainPage import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.home, name = 'home'),
+    url(r'^home/$', views.home, name = 'home'),
+    url(r'^login/$', views.login_by_ldap, name = 'login'),
+    url(r'^$', views.login_by_ldap, name = 'login'),
 ]
