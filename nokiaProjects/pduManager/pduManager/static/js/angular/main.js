@@ -179,6 +179,7 @@ pduApp.controller('mainController', function ($scope) {
       }
       $('#menuGroups').addClass("active");
       $('#secondLevelMenu').addClass('in');
+      $('.nav.nav-second-level.collapse').css('height', 'auto');
     }
     else if($scope.modeGroup == 'edit'){
       for(var i = 0; i < $scope.groups.length; i++){
