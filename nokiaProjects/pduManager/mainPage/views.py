@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
 
 def home(request):
     return render(request, 'mainPage/home.html')
@@ -10,15 +11,22 @@ def login_by_ldap(request):
     if request.method == 'POST':
         username = request.POST['username'];
         password = request.POST['password'];
+        #zakomentowane zebyscie mogli normalnie strone przegladac
+        # user = authenticate(username=username, password=password)
 
-        #przekazanie tych parametrow do ldapa i proba logowania
-        #jesli sukces to render homa, w przeciwnym razie wynik o blednym logowaniu
-        #trzeba tez zrobic autentyfikacje uzytkownika, aby moc sprawdzac w innych viewsach
-        #czy uzytkownik jest zalogowany. request.user.is_authenticated()
-        if 1 < 2:
-            return render(request, 'mainPage/home.html') #symulacja sukcesu
-        else:
-            print "Invalid login details: {0}, {1}".format(username, password) #symulacja bledu
-            return HttpResponse("Invalid login details supplied.")
+        # if user is not None:
+        #     if user.is_active:
+        #         login(request, user)
+        #         return render(request, 'mainPage/home.html') # success
+        #     else:
+        #         return HttpResponse("Account {} is disabled".format(username))
+        
+        # else:
+        #     return HttpResponse("Invalid login details supplied.")
+        return render(request, 'mainPage/home.html')
     else:
         return render(request, 'mainPage/login.html')
+
+def logout(request):
+    logout(request)
+    return render(request, 'mainPage/home.html')
