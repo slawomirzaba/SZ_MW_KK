@@ -157,6 +157,13 @@ pduApp.controller('mainController', function ($scope) {
     if(slot.selected == true){
       pdu.selected = true;
     }else{
+      var anySlotSelected = false;
+      for(var i = 0; i < pdu.arraySlots.length; ++i){
+        if(pdu.arraySlots[i].selected == true){
+          var anySlotSelected = true;
+          return ;
+        }
+      }
       pdu.selected = false;
     }
   }
