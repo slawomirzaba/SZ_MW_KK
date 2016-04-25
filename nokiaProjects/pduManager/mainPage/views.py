@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 
@@ -22,8 +22,8 @@ def login_by_ldap(request):
         #         return HttpResponse("Account {} is disabled".format(username))
         
         # else:
-        #     return HttpResponse("Invalid login details supplied.")
-        return render(request, 'mainPage/home.html')
+        #     return render(request, 'mainPage/login.html', {"error": "Invalid login details supplied. Please try again."})
+        return HttpResponseRedirect('/home')
     else:
         return render(request, 'mainPage/login.html')
 
