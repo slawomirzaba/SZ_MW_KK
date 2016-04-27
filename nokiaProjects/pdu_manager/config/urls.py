@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from mainPage import views
+from main import views
 
 urlpatterns = [
     url(r'^$', views.login_by_ldap, name = 'login'),
