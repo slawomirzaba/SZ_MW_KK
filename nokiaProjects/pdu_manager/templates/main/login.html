@@ -1,0 +1,36 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Is anyone getting tired of repeatedly entering the header over and over?? -->
+        <title>Login</title>
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    </head>
+
+    <body style="background-image: url('../../static/images/background.jpg'); background-repeat: no-repeat;background-size: cover;">
+
+        <form id="login_form" method="post" action="/home/" role="form" style = "text-align: center;width: 30%;position: fixed;left: 35%;top:20%">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="username" name="username" class="form-control" id="username">
+            </div>
+            <div class="form-group">
+              <label for="pwd">Password:</label>
+              <input type="password" name="password" class="form-control" id="pwd">
+            </div>
+
+            <button type="submit" class="btn btn-default" value="submit">Submit</button>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger" style="text-align:center;">
+                <strong>ERROR:</strong> {{error}}
+            </div>
+        {% endif %}
+
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    </body>
+</html>
