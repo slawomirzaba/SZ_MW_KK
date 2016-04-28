@@ -6,29 +6,26 @@
 <table class="table table-bordered pduTable" ng-repeat="pdu in (filteredPdus = (selectedGroup.allDevices | filter:{selected:true})) | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit">
     <tbody>
       <tr>
-        <td style="text-align:center"><span class="tablePduHeader">PDU Name:</span> {[{pdu.name}]} </td>
-        <td style="text-align:center"><span class="tablePduHeader">slots:</span> {[{pdu.slots}]}</td>
-        <td style ="max-width:800px" colspan="4" ng-if="editedPdu != pdu.id">
+        <td colspan="2" style="text-align:center;width:10%"><span class="tablePduHeader">PDU Name:</span> {[{pdu.name}]} </td>
+        <td colspan="2" style="text-align:center;width:10%"><span class="tablePduHeader">slots:</span> {[{pdu.slots}]}</td>
+        <td ng-if="editedPdu != pdu.id">
           <span class="tablePduHeader">Description: 
             <i ng-click = "editPduDescr(pdu)" class="fa fa-pencil" aria-hidden="true"></i> 
           </span>
           <div style="display:inline-block; margin-right:25px;">{[{pdu.descr}]}</div>
         </td>
-        <td style="max-width:800px" colspan="4" ng-if="editedPdu == pdu.id">
+        <td ng-if="editedPdu == pdu.id">
           <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
           <i ng-click="confirmDescr(pdu)" class="fa fa-check" aria-hidden="true"></i>
           <i ng-click="rejectDescr(pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
         </td>
       </tr>
       <tr>
-        <td colspan="2" style="text-align:center;vertical-align:middle;"><span class="tablePduHeader tableIP">Ip:</span> {[{pdu.ip}]}</td>
-        <td style="text-align:center"><button type="button" class="btn btn-success">Switch on</button></td>
-        <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
-        <td style="text-align:center"><button type="button" class="btn btn-primary">Reboot</button></td>
+        <td colspan="4" style="text-align:center;vertical-align:middle;"><span class="tablePduHeader tableIP">Ip:</span> {[{pdu.ip}]}</td>
         <td style="text-align:center;width:24%"><button ng-click="tooglePduInformations(pdu);" type="button" class="btn btn-info"> {[{pdu.dispMoreInfo != true? "Display more info": "Hide more info"}]}</button></td>
       </tr>
       <tr ng-show="pdu.dispMoreInfo" ng-repeat-start = "slot in pdu.arraySlots | filter:{selected:true}">
-        <td colspan="5" style="text-align:center;background-color: D2E7FC;"> 
+        <td colspan="4" style="text-align:center;background-color: D2E7FC;"> 
           <span class="tablePduHeader tableIP">Slot {[{slot.id}]}:</span> {[{slot.state}]}
         </td>
         <td rowspan="2" ng-if="editedslot != slot.id || editedSlotFromPdu != pdu.id"> 
@@ -48,7 +45,6 @@
         <td style="text-align:center"><button type="button" class="btn btn-danger">Switch off</button></td>
         <td style="text-align:center"> <button type="button" class="btn btn-primary">Reboot</button></td>
         <td style="text-align:center"><button type="button" class="btn btn-info">Check state</button></td>
-        <td style="text-align:center"><button type="button" class="btn btn-warning">Add to group</button></td>
       </tr>
     </tbody>
   </table>
