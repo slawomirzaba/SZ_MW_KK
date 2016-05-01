@@ -16,7 +16,11 @@ vector < Task > tasks;
 vector < Task > ready;
 vector < Task > bestPermutation;
 int n;
-
+int max(const int & a, const int & b){
+	if(a > b)
+		return a;
+	return b;
+}
 bool comparatorR (const Task & a, const Task & b){
 	return a.r < b.r;
 }
@@ -33,7 +37,7 @@ void sortQ(vector <Task> & vect){
 	stable_sort(vect.begin(), vect.end(), comparatorQ);
 }
 
-void load(char* fileName){
+void load(const char* fileName){
 	Task tmp;
 	ifstream file;
 	file.open(fileName);
@@ -46,8 +50,9 @@ void load(char* fileName){
 	}
 	file.close();
 }
+
 int shrage(vector <Task> & permutation){
-	vector <Task> tmpTasks = permutation;
+	vector <Task> tmpTasks = tasks;
 	permutation.clear();
 	sortR(tmpTasks);
 	Task tmp;
@@ -108,7 +113,7 @@ int shrageDivision(){
   	return cMax;
 }
 
-void designateBlock(int & a, int & b, int & j, vector <Task> & permutation, int cMaxPermutation){
+void designateBlock(int & a, int & b, int & j, const vector <Task> & permutation){
 	int currentMax = 0;
 	j = -1;
 
@@ -118,22 +123,20 @@ void designateBlock(int & a, int & b, int & j, vector <Task> & permutation, int 
 			currentMax = permutation[i].timeEntryOnMachine + permutation[i].p + permutation[i].q;
 		}
 	}
-	for(a = b; a >= 0; --a){
+	for(a = b - 1; a >= 0; --a){
 		if(permutation[a].timeEntryOnMachine + permutation[a].p < permutation[a + 1].timeEntryOnMachine){
 			break;
 		}
 	}
-
 	for(int i = b - 1; i >= a; --i){
 		if(permutation[i].q < permutation[b].q){
 			j = i;
 			break;
 		}
 	}
-
 }
 
-int minR(int start, int end, vector <Task> permutation){
+int minR(const int & start, const int & end, const vector <Task> & permutation){
 	int r = INT_MAX;
 	for(int i = start; i <= end; ++i)
 		if(permutation[i].r < r){
@@ -143,7 +146,7 @@ int minR(int start, int end, vector <Task> permutation){
 	return r;
 }
 
-int minQ(int start, int end, vector <Task> permutation){
+int minQ(const int & start, const int & end, const vector <Task> & permutation){
 	int q = INT_MAX;
 	for(int i = start; i <= end; ++i)
 		if(permutation[i].q < q){
@@ -153,50 +156,56 @@ int minQ(int start, int end, vector <Task> permutation){
 	return q;
 }
 
-int sumP(int start, int end, vector <Task> permutation){
+int sumP(const int & start, const int & end, const vector <Task> & permutation){
 	int p = 0;
-	for(int i = 0; i <= end; ++i){
+	for(int i = start; i <= end; ++i){
 		p += permutation[i].p;
 	}
+	return p;
+}
+
+int choiceOfStrategy(int rOryginal, int qOryginal){
+
 }
 
 
-void carlier(int &upBank, vector <Task> permutation){
-	int cMax, a, b, j, tmpR, tmpQ, tmpP, rOryginal, qOryginal, downBank;
+void carlier(int & upBank){
+	int cMax, a, b, j, tmpR, tmpQ, tmpP, rOryginal, qOryginal, downBank, index;
+	vector <Task> permutation;
 	cMax = shrage(permutation);
 	if( cMax < upBank ){
 		upBank = cMax;
 		bestPermutation = permutation;
 	}
-	designateBlock(a, b, j, permutation, cMax);
+	designateBlock(a, b, j, permutation);
 	if(j == -1)
 		return;
 	tmpR = minR(j+1, b, permutation);
 	tmpQ = minQ(j+1, b, permutation);
 	tmpP = sumP(j+1, b, permutation);
 	rOryginal = permutation[j].r;
-	permutation[j].r = max(permutation[j].r, tmpR + tmpP);
+	index = permutation[j].nr;
+	tasks[index].r = max(rOryginal, tmpR + tmpP);
+	
 	downBank = shrageDivision();
-	if( downBank < upBank){
-		carlier(upBank, permutation);
+	if( downBank < upBank ){
+		carlier(upBank);
 	}
-	permutation[j].r = rOryginal;
-
+	tasks[index].r  = rOryginal;
 	qOryginal = permutation[j].q;
-	permutation[j].q = max(permutation[j].q, tmpQ + tmpP);
+	tasks[index].q = max(qOryginal, tmpQ + tmpP);
 	downBank = shrageDivision();
-	cout << downBank << upBank << endl;
-	if( downBank < upBank){
-		carlier(upBank, permutation);
+	if( downBank < upBank ){
+		carlier(upBank);
 	}
-	permutation[j].q = qOryginal;
+	tasks[index].q = qOryginal;
 }
 
 int main(){
 	int max = INT_MAX;
 	char file[10] = "in1.txt";
 	load(file);
-	carlier(max, tasks);
+	carlier(max);
 	for(int i = 0; i < n; i++)
 		cout << bestPermutation[i].nr << " ";
 	cout << endl << max << endl;
