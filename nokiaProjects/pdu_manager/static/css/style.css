@@ -7,8 +7,8 @@
 }
 
 .pduTable{
-  margin-top:10px;
-  margin-bottom:50px;
+  margin-top: 10px;
+  margin-bottom: 0px;
 }
 
 .tablePduHeader{
@@ -72,4 +72,19 @@ textarea.slotDesc{
 	text-align:center;
 	width:50px;
 	height:19px;
+}
+.pduTableButton{
+	float: right;
+	margin-bottom: 50px;
+    background-color: #686868;
+    font-weight: bold;
+    color: white;
+    border: none;
+}
+.headerRow{
+    background-color: #686868;
+    color: white;
+}
+.pagination{
+	margin: 100px 0;
 }
