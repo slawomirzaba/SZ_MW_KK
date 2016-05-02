@@ -25,12 +25,14 @@ class Action(models.Model):
 
 
 class Group(models.Model):
-    idgroup = models.AutoField(db_column='idGROUP', primary_key=True)  # Field name made lowercase.
+    idgroup = models.AutoField(db_column='idGROUP')  # Field name made lowercase.
     name = models.CharField(max_length=45)
+    user_id_owner = models.ForeignKey('User', models.DO_NOTHING, db_column='USER_id_OWNER')  # Field name made lowercase.
 
     class Meta:
         managed = True
         db_table = 'GROUP'
+        unique_together = (('idgroup', 'user_id_owner'),)
 
 
 class GroupHasPdu(models.Model):

@@ -15,7 +15,7 @@
           <td colspan="2" style="text-align:center;"> {[{pdu.ip}]} </td>
           <td ng-if="editedPdu != pdu.id">
               <i ng-click = "editPduDescr(pdu)" class="fa fa-pencil" aria-hidden="true"></i>
-            <div style="display:inline-block; width: 95%">{[{pdu.descr}]}</div>
+            <div style="display:inline-block; width: 90%">{[{pdu.descr}]}</div>
           </td>
           <td ng-if="editedPdu == pdu.id">
             <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
@@ -40,7 +40,7 @@
             <span class="tablePduHeader">
               <i ng-click = "editSlotDescr(slot, pdu.id)" class="fa fa-pencil" aria-hidden="true"></i>
             </span>
-            <div style="display:inline-block; width: 95%">{[{slot.descr}]}</div>
+            <div style="display:inline-block; width: 90%">{[{slot.descr}]}</div>
           </td>
           <td ng-if="editedslot == slot.id && editedSlotFromPdu == pdu.id">
             <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
