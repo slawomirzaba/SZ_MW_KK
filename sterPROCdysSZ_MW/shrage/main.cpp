@@ -12,15 +12,18 @@ struct Task{
 	int q;
 	int timeEntryOnMachine;
 };
+
 vector < Task > tasks;
 vector < Task > ready;
 vector < Task > bestPermutation;
 int n;
+
 int max(const int & a, const int & b){
 	if(a > b)
 		return a;
 	return b;
 }
+
 bool comparatorR (const Task & a, const Task & b){
 	return a.r < b.r;
 }
@@ -77,7 +80,6 @@ int shrage(vector <Task> & permutation){
   		}
   	}
   	return cMax;
-  	
 }
 
 int shrageDivision(){
@@ -123,11 +125,13 @@ void designateBlock(int & a, int & b, int & j, const vector <Task> & permutation
 			currentMax = permutation[i].timeEntryOnMachine + permutation[i].p + permutation[i].q;
 		}
 	}
+
 	for(a = b - 1; a >= 0; --a){
 		if(permutation[a].timeEntryOnMachine + permutation[a].p < permutation[a + 1].timeEntryOnMachine){
 			break;
 		}
 	}
+
 	for(int i = b - 1; i >= a; --i){
 		if(permutation[i].q < permutation[b].q){
 			j = i;
@@ -138,6 +142,7 @@ void designateBlock(int & a, int & b, int & j, const vector <Task> & permutation
 
 int minR(const int & start, const int & end, const vector <Task> & permutation){
 	int r = INT_MAX;
+
 	for(int i = start; i <= end; ++i)
 		if(permutation[i].r < r){
 			r = permutation[i].r;
@@ -148,6 +153,7 @@ int minR(const int & start, const int & end, const vector <Task> & permutation){
 
 int minQ(const int & start, const int & end, const vector <Task> & permutation){
 	int q = INT_MAX;
+
 	for(int i = start; i <= end; ++i)
 		if(permutation[i].q < q){
 			q = permutation[i].q;
@@ -158,47 +164,101 @@ int minQ(const int & start, const int & end, const vector <Task> & permutation){
 
 int sumP(const int & start, const int & end, const vector <Task> & permutation){
 	int p = 0;
+
 	for(int i = start; i <= end; ++i){
 		p += permutation[i].p;
 	}
+
 	return p;
 }
 
-int choiceOfStrategy(int rOryginal, int qOryginal){
+void eliminationTests(const int & start, const int & end, vector <Task> & permutation, int & upBank){
+	int hK = minR(start, end, permutation) + sumP(start, end, permutation) + minQ(start, end, permutation);
+
+	for(int i = 0; i < n; ++i){
+		if( i < start || i > end){
+			if( permutation[i].p > upBank - hK ){
+				if( permutation[i].r + permutation[i].p + sumP(start, end, permutation) + permutation[end].q >= upBank )
+					tasks[permutation[i].nr].r = max(permutation[i].r, minR(start, end, permutation) + sumP(start, end, permutation) );
+				else if( minR(start, end, permutation) + permutation[i].p + sumP(start, end, permutation) + permutation[i].q >= upBank )
+					tasks[permutation[i].nr].q = max(permutation[i].q, sumP(start, end, permutation) + minQ(start, end, permutation) );
+			}
+		}
+	}
 
 }
 
+int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP, int tmpQ, int & downBank, int upBank){
+	int downBank1, downBank2;
+
+	tasks[index].r = max(rOryginal, tmpR + tmpP);
+	downBank1 = shrageDivision();
+	tasks[index].r  = rOryginal;
+
+	tasks[index].q = max(qOryginal, tmpQ + tmpP);
+	downBank2 = shrageDivision();
+	tasks[index].q = qOryginal;
+
+	if(downBank1 < downBank2){
+		if(downBank1 < upBank){
+			downBank = downBank1;
+			return 1;
+		}
+		return -1;
+	}
+	else{
+		if(downBank2 < upBank){
+			downBank = downBank2;
+			return 2;
+		}
+		return -1;
+	}
+}
 
 void carlier(int & upBank){
-	int cMax, a, b, j, tmpR, tmpQ, tmpP, rOryginal, qOryginal, downBank, index;
+	int cMax, a, b, j, tmpR, tmpQ, tmpP, rOryginal, qOryginal, downBank, index, strategy;
 	vector <Task> permutation;
+
 	cMax = shrage(permutation);
 	if( cMax < upBank ){
 		upBank = cMax;
 		bestPermutation = permutation;
 	}
 	designateBlock(a, b, j, permutation);
-	if(j == -1)
+	if( j == -1 )
 		return;
 	tmpR = minR(j+1, b, permutation);
 	tmpQ = minQ(j+1, b, permutation);
 	tmpP = sumP(j+1, b, permutation);
 	rOryginal = permutation[j].r;
-	index = permutation[j].nr;
-	tasks[index].r = max(rOryginal, tmpR + tmpP);
-	
-	downBank = shrageDivision();
-	if( downBank < upBank ){
-		carlier(upBank);
-	}
-	tasks[index].r  = rOryginal;
 	qOryginal = permutation[j].q;
-	tasks[index].q = max(qOryginal, tmpQ + tmpP);
-	downBank = shrageDivision();
-	if( downBank < upBank ){
-		carlier(upBank);
+	index = permutation[j].nr;
+	eliminationTests(j + 1, b, permutation, upBank);
+	strategy = choiceOfStrategy(rOryginal, qOryginal, index, tmpR, tmpP, tmpQ, downBank, upBank);
+	switch(strategy){
+		case 1:
+			tasks[index].r = max(rOryginal, tmpR + tmpP);
+			carlier(upBank);
+			tasks[index].r  = rOryginal;
+			tasks[index].q = max(qOryginal, tmpQ + tmpP);
+			downBank = shrageDivision();
+			if( downBank < upBank ){
+				carlier(upBank);
+			}
+			tasks[index].q = qOryginal;
+		break;
+		case 2:
+			tasks[index].q = max(qOryginal, tmpQ + tmpP);
+			carlier(upBank);
+			tasks[index].q = qOryginal;
+			tasks[index].r = max(rOryginal, tmpR + tmpP);
+			downBank = shrageDivision();
+			if( downBank < upBank ){
+				carlier(upBank);
+			}
+			tasks[index].r  = rOryginal;
+		break;
 	}
-	tasks[index].q = qOryginal;
 }
 
 int main(){
@@ -209,5 +269,8 @@ int main(){
 	for(int i = 0; i < n; i++)
 		cout << bestPermutation[i].nr << " ";
 	cout << endl << max << endl;
+	tasks.clear();
+	ready.clear();
+	bestPermutation.clear();
 	return 0;
 }
