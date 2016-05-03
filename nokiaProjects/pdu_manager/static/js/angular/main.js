@@ -3,6 +3,10 @@ pduApp.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
   $interpolateProvider.endSymbol('}]}');
 });
+pduApp.config(function($httpProvider){
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken'
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken'
+});
 
 pduApp.filter('startFrom', function() {
     return function(input, start) {
@@ -149,7 +153,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
 
     /* init pagination with $scope.list */
   $scope.getNumberPages = function() {
-    return new Array($scope.pagination.noOfPages);   
+    return new Array($scope.pagination.noOfPages);
   }
   $scope.changePage = function(page){
     if(page <= $scope.pagination.noOfPages && page > 0){
@@ -203,7 +207,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       if (index != -1){
         angular.forEach(g.allDevices[index].arraySlots, function(s, j){
           if(slot.id == s.id)
-            s.descr = $scope.descr.editedSlotDescrText 
+            s.descr = $scope.descr.editedSlotDescrText
         });
       }
     });
@@ -215,15 +219,15 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
   }
   $scope.switchOnSlot = function(pdu, slot){
     $http({
-      url: "switchOn",
-      method: "POST",
+      url: "pdu_communicator/switch_on_outlet",
+      method: "GET",
       params: {
         pduId: pdu.id,
         outletId: slot.id
       },
       data: JSON.stringify({
         "pdu" : pdu,
-        "oulet" : slot 
+        "oulet" : slot
       })
     }).success(function(data, status, headers, config){
       console.log("switch on correctly");
