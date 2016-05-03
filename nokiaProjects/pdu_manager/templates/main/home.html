@@ -32,7 +32,7 @@
           </td>
         </tr>
         <tr ng-show="pdu.dispMoreInfo" ng-repeat-end>
-          <td style="text-align:center;width:15%"><button type="button" class="btn btn-success">Switch on</button></td>
+          <td style="text-align:center;width:15%"><button type="button" ng-click = "switchOnSlot(pdu, slot);" class="btn btn-success">Switch on</button></td>
           <td style="text-align:center;width:15%"><button type="button" class="btn btn-danger">Switch off</button></td>
           <td style="text-align:center;width:15%"> <button type="button" class="btn btn-primary">Reboot</button></td>
           <td style="text-align:center;width:15%"><button type="button" class="btn btn-info">Check state</button></td>

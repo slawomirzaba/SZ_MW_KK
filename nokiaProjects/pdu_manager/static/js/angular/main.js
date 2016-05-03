@@ -14,80 +14,12 @@ pduApp.filter('startFrom', function() {
     }
 });
 
-pduApp.controller('mainController', function ($scope) {
+pduApp.controller('mainController',['$scope', '$http', 'repository', function ($scope, $http, repository){
   $scope.descr = {
     editedPduDescrText: "",
     editedSlotDescrText: ""
   }
-  $scope.arrayPdu = [
-    {
-      id: "1",
-      name: "PDU 1",
-      ip: "192.168.1.1",
-      slots: "2",
-      descr: "fajne PDU",
-      arraySlots: [
-        {
-          id: "1",
-          state: "active",
-          descr: "fajny socket"
-        },
-        {
-          id: "2",
-          state: "disable",
-          descr: "fajny socket"
-        },
-      ]
-    },
-    {
-      id: "2",
-      name: "PDU 2",
-      ip: "192.168.1.21",
-      slots: "3",
-      descr: "fajne PDU",
-      arraySlots: [
-        {
-          id: "1",
-          state: "active",
-          descr: "fajny socket"
-        },
-        {
-          id: "2",
-          state: "disable",
-          descr: "fajny socket"
-        },
-        {
-          id: "3",
-          state: "active",
-          descr: "fajny socket"
-        }
-      ]
-    },
-    {
-      id: "3",
-      name: "PDU 3",
-      ip: "192.168.1.23",
-      slots: "3",
-      descr: "fajne PDU",
-      arraySlots: [
-        {
-          id: "1",
-          state: "active",
-          descr: "fajny socket"
-        },
-        {
-          id: "2",
-          state: "disable",
-          descr: "fajny socket"
-        },
-        {
-          id: "3",
-          state: "active",
-          descr: "fajny socket"
-        }
-      ]
-    }
-  ];
+  $scope.arrayPdu = repository.arrayPdu;
 
   $scope.groups = [
     {
@@ -281,4 +213,22 @@ pduApp.controller('mainController', function ($scope) {
     $scope.modeGroup = "edit";
     $scope.newGroup = angular.copy(group);
   }
-});
+  $scope.switchOnSlot = function(pdu, slot){
+    $http({
+      url: "switchOn",
+      method: "POST",
+      params: {
+        pduId: pdu.id,
+        outletId: slot.id
+      },
+      data: JSON.stringify({
+        "pdu" : pdu,
+        "oulet" : slot 
+      })
+    }).success(function(data, status, headers, config){
+      console.log("switch on correctly");
+    }).error(function(data, status, headers, config){
+      console.log("switch on not correctly");
+    })
+  }
+}]);
