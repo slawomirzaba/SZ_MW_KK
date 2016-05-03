@@ -230,9 +230,9 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         "oulet" : slot
       })
     }).success(function(data, status, headers, config){
-      console.log("switch on correctly");
+      console.log(data);
     }).error(function(data, status, headers, config){
-      console.log("switch on not correctly");
+      console.log("error while switch on");
     })
   }
 }]);
