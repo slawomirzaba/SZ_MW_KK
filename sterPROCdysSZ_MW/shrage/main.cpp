@@ -188,15 +188,15 @@ void eliminationTests(const int & start, const int & end, vector <Task> & permut
 
 }
 
-int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP, int tmpQ, int & downBank, int upBank){
+int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP, int tmpQ, int & downBank, int upBank, const int & j, const int & end, const vector <Task > & permutaion){
 	int downBank1, downBank2;
 
 	tasks[index].r = max(rOryginal, tmpR + tmpP);
-	downBank1 = shrageDivision();
+	downBank1 = fastLowerBank(j, b, permutation);;
 	tasks[index].r  = rOryginal;
 
 	tasks[index].q = max(qOryginal, tmpQ + tmpP);
-	downBank2 = shrageDivision();
+	downBank2 = fastLowerBank(j, b, permutation);
 	tasks[index].q = qOryginal;
 
 	if(downBank1 < downBank2){
@@ -213,6 +213,13 @@ int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP
 		}
 		return -1;
 	}
+}
+
+int fastLowerBank(const int & j, const int & end, const vector < Task > & permutation ){
+	int h1 = minR(j, end, permutation) + sumP(j, end, permutation) + minQ(j, end, permutation);
+	int h2 = minR(j + 1, end, permutation) + sumP(j + 1, end, permutation) + minQ(j + 1, end, permutation);
+	
+	return max(h1, h2);
 }
 
 void carlier(int & upBank){
@@ -234,14 +241,14 @@ void carlier(int & upBank){
 	qOryginal = permutation[j].q;
 	index = permutation[j].nr;
 	eliminationTests(j + 1, b, permutation, upBank);
-	strategy = choiceOfStrategy(rOryginal, qOryginal, index, tmpR, tmpP, tmpQ, downBank, upBank);
+	strategy = choiceOfStrategy(rOryginal, qOryginal, index, tmpR, tmpP, tmpQ, downBank, upBank, j, b, permuation);
 	switch(strategy){
 		case 1:
 			tasks[index].r = max(rOryginal, tmpR + tmpP);
 			carlier(upBank);
 			tasks[index].r  = rOryginal;
 			tasks[index].q = max(qOryginal, tmpQ + tmpP);
-			downBank = shrageDivision();
+			downBank = fastLowerBank(j, b, permutation);
 			if( downBank < upBank ){
 				carlier(upBank);
 			}
@@ -252,7 +259,7 @@ void carlier(int & upBank){
 			carlier(upBank);
 			tasks[index].q = qOryginal;
 			tasks[index].r = max(rOryginal, tmpR + tmpP);
-			downBank = shrageDivision();
+			downBank = fastLowerBank(j, b, permutation);
 			if( downBank < upBank ){
 				carlier(upBank);
 			}
@@ -272,5 +279,6 @@ int main(){
 	tasks.clear();
 	ready.clear();
 	bestPermutation.clear();
+	getchar();
 	return 0;
 }
