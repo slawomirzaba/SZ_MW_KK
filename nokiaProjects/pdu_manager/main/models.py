@@ -38,5 +38,4 @@ class User_action(models.Model):
     time = models.DateTimeField(blank = False)
     user = models.ForeignKey(User, blank = False)
     outlet = models.ForeignKey(Outlet, blank = False)
-    pdu = models.ForeignKey(Pdu, blank = False)
     type = models.ForeignKey(Type_user_action, blank = False)
