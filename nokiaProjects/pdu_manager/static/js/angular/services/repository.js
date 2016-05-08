@@ -5,65 +5,57 @@ angular.module('pduApp').factory('repository', [function(){
 			{
 		      id: "1",
 		      name: "PDU 1",
-		      ip: "192.168.1.1",
+		      ip: "192.168.0.60",
 		      descr: "fajne PDU",
 		      arraySlots: [
 		        {
 		          id: "1",
+							nr: 1,
 		          state: "active",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "2",
+							nr: 2,
 		          state: "disable",
 		          descr: "fajny socket"
 		        },
-		      ]
-		    },
-		    {
-		      id: "2",
-		      name: "PDU 2",
-		      ip: "192.168.1.21",
-		      descr: "fajne PDU",
-		      arraySlots: [
-		        {
+						{
 		          id: "1",
+							nr: 3,
 		          state: "active",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "2",
+							nr: 4,
 		          state: "disable",
 		          descr: "fajny socket"
 		        },
-		        {
-		          id: "3",
-		          state: "active",
-		          descr: "fajny socket"
-		        }
-		      ]
-		    },
-		    {
-		      id: "3",
-		      name: "PDU 3",
-		      ip: "192.168.1.23",
-		      descr: "fajne PDU",
-		      arraySlots: [
-		        {
-		          id: "1",
+						{
+		          id: "5",
+							nr: 5,
 		          state: "active",
 		          descr: "fajny socket"
 		        },
 		        {
-		          id: "2",
+		          id: "6",
+							nr: 6,
 		          state: "disable",
 		          descr: "fajny socket"
 		        },
-		        {
-		          id: "3",
+						{
+		          id: "7",
+							nr: 7,
 		          state: "active",
 		          descr: "fajny socket"
-		        }
+		        },
+		        {
+		          id: "8",
+							nr: 8,
+		          state: "disable",
+		          descr: "fajny socket"
+		        },
 		      ]
 		    }
 		]
