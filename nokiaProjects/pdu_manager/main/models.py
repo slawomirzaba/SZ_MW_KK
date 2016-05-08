@@ -28,6 +28,7 @@ class Outlet(models.Model):
     id = models.AutoField(primary_key = True, blank = False, unique = True)
     description = models.CharField(max_length = 200)
     pdu = models.ForeignKey(Pdu, blank = False)
+    number = models.IntegerField(default=1)
 
 class Type_user_action(models.Model):
     id = models.AutoField(primary_key = True, blank = False, unique = True)
