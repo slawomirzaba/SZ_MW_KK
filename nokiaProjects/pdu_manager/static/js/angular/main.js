@@ -221,7 +221,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
   }
   $scope.switchOnSlot = function(pdu, slot){
     $http({
-      url: "pdu_communicator/switch_on_outlet",
+      url: "/pdu_communicator/switch_on_outlet",
       method: "GET",
       params: {
         pduId: pdu.id,
