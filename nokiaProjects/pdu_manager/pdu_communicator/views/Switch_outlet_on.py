@@ -8,9 +8,9 @@ class Switch_outlet_on(View):
     redirect_field_name = None
 
     def get(self, request):
-        pdu_id = request.GET.get("pduId")
-        outlet_id = request.GET.get("outletId")
-
+        pdu_ip = request.GET.get("pdu_ip")
+        outlet_nr = request.GET.get("outlet_nr")
+        print pdu_ip + " " + outlet_nr
         # twoj kod wlaczajacy urzadzenie
         ip = "192.168.0.60"
         aten = ATEN(ip, timeout=0.1)

@@ -224,13 +224,9 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       url: "/pdu_communicator/switch_on_outlet",
       method: "GET",
       params: {
-        pduId: pdu.id,
-        outletId: slot.id
-      },
-      data: JSON.stringify({
-        "pdu" : pdu,
-        "oulet" : slot
-      })
+        pdu_ip: pdu.ip,
+        outlet_nr: slot.nr
+      }
     }).success(function(data, status, headers, config){
       console.log(data);
     }).error(function(data, status, headers, config){

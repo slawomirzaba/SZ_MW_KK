@@ -113,7 +113,7 @@
             <span ng-click="selectLabelAdiingGroup(pdu);" class="label label-info headerMenuGroup" style="display:block;margin-top:10px;cursor:pointer;"> {[{pdu.name}]}: {[{pdu.ip}]} <i ng-class="selectedLabel == pdu.id? 'fa fa-angle-up': 'fa fa-angle-down'"></i> </span>
             <div class = "showMenuAddingGroup">
               <div class="checkbox" ng-repeat="slot in pdu.arraySlots">
-                <label><input type="checkbox" ng-change="addPduToGroup(pdu, slot);" ng-model = "slot.selected">Slot {[{slot.id}]}</label>
+                <label><input type="checkbox" ng-change="addPduToGroup(pdu, slot);" ng-model = "slot.selected">Slot {[{slot.nr}]}</label>
               </div>
             </div>
           </div>
