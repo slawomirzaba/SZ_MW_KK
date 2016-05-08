@@ -11,6 +11,10 @@
   margin-bottom: 0px;
 }
 
+.groupTable{
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
 .tablePduHeader{
   font-weight: bold;
   display:block;
@@ -87,4 +91,9 @@ textarea.slotDesc{
 }
 .pagination{
 	margin: 100px 0;
+}
+
+button{
+	padding: 1px 6px !important;
+    border: none !important;
 }

@@ -188,15 +188,28 @@ void eliminationTests(const int & start, const int & end, vector <Task> & permut
 
 }
 
-int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP, int tmpQ, int & downBank, int upBank, const int & j, const int & end, const vector <Task > & permutaion){
-	int downBank1, downBank2;
+int fastLowerBank(const int & j, const int & end, const vector < Task > & permutation ){
+	int h1 = minR(j, end, permutation) + sumP(j, end, permutation) + minQ(j, end, permutation);
+	int h2 = minR(j + 1, end, permutation) + sumP(j + 1, end, permutation) + minQ(j + 1, end, permutation);
+	
+	return max(h1, h2);
+}
 
+int choiceOfStrategy(const int & j, const int & b, vector <Task> permutation, int & downBank, int upBank){
+	int downBank1, downBank2;
+	int tmpR = minR(j+1, b, permutation);
+	int tmpQ = minQ(j+1, b, permutation);
+	int tmpP = sumP(j+1, b, permutation);
+	int rOryginal = permutation[j].r;
+	int qOryginal = permutation[j].q;
+	int index = permutation[j].nr;
+	
 	tasks[index].r = max(rOryginal, tmpR + tmpP);
-	downBank1 = fastLowerBank(j, b, permutation);;
+	downBank1 = shrageDivision();
 	tasks[index].r  = rOryginal;
 
 	tasks[index].q = max(qOryginal, tmpQ + tmpP);
-	downBank2 = fastLowerBank(j, b, permutation);
+	downBank2 = shrageDivision();
 	tasks[index].q = qOryginal;
 
 	if(downBank1 < downBank2){
@@ -213,13 +226,6 @@ int choiceOfStrategy(int rOryginal, int qOryginal, int index, int tmpR, int tmpP
 		}
 		return -1;
 	}
-}
-
-int fastLowerBank(const int & j, const int & end, const vector < Task > & permutation ){
-	int h1 = minR(j, end, permutation) + sumP(j, end, permutation) + minQ(j, end, permutation);
-	int h2 = minR(j + 1, end, permutation) + sumP(j + 1, end, permutation) + minQ(j + 1, end, permutation);
-	
-	return max(h1, h2);
 }
 
 void carlier(int & upBank){
@@ -241,7 +247,7 @@ void carlier(int & upBank){
 	qOryginal = permutation[j].q;
 	index = permutation[j].nr;
 	eliminationTests(j + 1, b, permutation, upBank);
-	strategy = choiceOfStrategy(rOryginal, qOryginal, index, tmpR, tmpP, tmpQ, downBank, upBank, j, b, permuation);
+	strategy = choiceOfStrategy(j, b, permutation, downBank, upBank);
 	switch(strategy){
 		case 1:
 			tasks[index].r = max(rOryginal, tmpR + tmpP);
@@ -269,16 +275,23 @@ void carlier(int & upBank){
 }
 
 int main(){
-	int max = INT_MAX;
-	char file[10] = "in1.txt";
-	load(file);
-	carlier(max);
-	for(int i = 0; i < n; i++)
-		cout << bestPermutation[i].nr << " ";
-	cout << endl << max << endl;
-	tasks.clear();
-	ready.clear();
-	bestPermutation.clear();
-	getchar();
+	int max;
+	char file[10];
+	ofstream output;
+	output.open("out.txt", ios::trunc);
+	for(int fileNumber = 0; fileNumber <= 8; ++fileNumber){
+		sprintf(file, "in%d.txt", fileNumber);
+		max = INT_MAX;
+		load(file);
+		carlier(max);
+		output << "permutacja:" << endl;
+		for(int i = 0; i < n; i++)
+			output << bestPermutation[i].nr << " ";
+		output << endl << "cMax: " << max << endl << endl;
+		tasks.clear();
+		ready.clear();
+		bestPermutation.clear();
+	}
+	output.close();
 	return 0;
 }

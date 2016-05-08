@@ -32,8 +32,9 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       allDevices: angular.copy($scope.arrayPdu)
     }
   ]
-
+  $scope.templates = ['display_devices', 'display_groups'];
   $scope.init = function(){
+    $scope.contentOfTab = $scope.templates[0];
     $scope.selectGroup(0);
     $scope.filteredPdus = $scope.groups[0].allDevices;
     $scope.pagination = {
@@ -45,6 +46,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
   }
   $scope.selectGroup = function(id){
+    $scope.contentOfTab = $scope.templates[0];
     if(id == 0){
       $scope.selectedGroup = $scope.groups[0];
       for(var i = 0 ; i < $scope.selectedGroup.allDevices.length; ++i){
@@ -235,4 +237,5 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       console.log("error while switch on");
     })
   }
+
 }]);

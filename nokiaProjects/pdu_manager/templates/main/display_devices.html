@@ -1,0 +1,76 @@
+<div ng-repeat="pdu in (filteredPdus = (selectedGroup.allDevices | filter:{selected:true})) | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit">
+    <table class="table table-bordered pduTable">
+        <tbody>
+          <tr class = "headerRow">
+            <td colspan="2" style="text-align:center;width:30%"><span class="tablePduHeader">PDU Name:</span></td>
+            <td colspan="2" style="text-align:center;width:30%"><span class="tablePduHeader">Ip:</span></td>
+            <td style="text-align:center;width:40%"><span class="tablePduHeader">Description:</span></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:center;"> {[{pdu.name}]} </td>
+            <td colspan="2" style="text-align:center;"> {[{pdu.ip}]} </td>
+            <td ng-if="editedPdu != pdu.id">
+                <i ng-click = "editPduDescr(pdu)" class="fa fa-pencil" aria-hidden="true"></i>
+              <div style="display:inline-block; width: 90%">{[{pdu.descr}]}</div>
+            </td>
+            <td ng-if="editedPdu == pdu.id">
+              <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
+              <i ng-click="confirmDescr(pdu)" class="fa fa-check" aria-hidden="true"></i>
+              <i ng-click="rejectDescr(pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
+            </td>
+          </tr>
+          <tr ng-show="pdu.dispMoreInfo" ng-repeat-start = "slot in pdu.arraySlots | filter:{selected:true}" style="background-color: D2E7FC;">
+            <td colspan="4" style="text-align:center;width:60%">
+              <span class="tablePduHeader tableIP">Outlet {[{slot.id}]}:</span> {[{slot.state}]}
+            </td>
+            <td style="text-align:center;width:40%">
+              <span class="tablePduHeader tableIP">Description: </span>
+            </td>
+          </tr>
+          <tr ng-show="pdu.dispMoreInfo" ng-repeat-end>
+            <td style="text-align:center;width:15%"><button type="button" ng-click = "switchOnSlot(pdu, slot);" class="btn btn-success">Switch on</button></td>
+            <td style="text-align:center;width:15%"><button type="button" class="btn btn-danger">Switch off</button></td>
+            <td style="text-align:center;width:15%"> <button type="button" class="btn btn-primary">Reboot</button></td>
+            <td style="text-align:center;width:15%"><button type="button" class="btn btn-info">Check state</button></td>
+            <td ng-if="editedslot != slot.id || editedSlotFromPdu != pdu.id">
+              <span class="tablePduHeader">
+                <i ng-click = "editSlotDescr(slot, pdu.id)" class="fa fa-pencil" aria-hidden="true"></i>
+              </span>
+              <div style="display:inline-block; width: 90%">{[{slot.descr}]}</div>
+            </td>
+            <td ng-if="editedslot == slot.id && editedSlotFromPdu == pdu.id">
+              <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
+              <i ng-click="confirmSlot(slot, pdu)" class="fa fa-check" aria-hidden="true"></i>
+              <i ng-click="rejectSlotDescr(slot.id, pdu.id)" class="fa fa-ban" aria-hidden="true"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button ng-click="tooglePduInformations(pdu);" type="button" class="pduTableButton"> {[{pdu.dispMoreInfo != true? "Display outlets": "Hide outlets"}]} <i class="fa" ng-class="{'fa-chevron-down' : !pdu.dispMoreInfo, 'fa-chevron-up': pdu.dispMoreInfo}" aria-hidden="true"></i></button>
+  </div>
+
+    <ul class="pagination" ng-if="pagination.noOfPages > 1">
+    <li ng-click="changePage(1);" ng-class="{'disabled': pagination.currentPage == 1}">
+      <a href="#">first</a>
+    </li>
+    <li ng-click="changePage(pagination.currentPage - 1);" ng-class="{'disabled': pagination.currentPage == 1}">
+      <a href="#">«</a>
+    </li>
+    <li ng-click="changePage($index + 1);" ng-class="{'disabled': pagination.currentPage == $index + 1}" ng-repeat = "i in getNumberPages() | limitTo:pagination.limitPages track by $index ">
+      <a href="#">{[{$index + 1}]}</a>
+    </li>
+    <li ng-click="changePage(pagination.currentPage + 1);" ng-class="{'disabled': pagination.currentPage == pagination.noOfPages}">
+      <a href="#">»</a>
+    </li>
+    <li ng-click="changePage(pagination.noOfPages);" ng-class="{'disabled': pagination.currentPage == pagination.noOfPages}">
+      <a href="#">last</a>
+    </li>
+    <li style="height:34px;">
+      <a>results on page: <input class="pages" style = "padding:0;" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
+    </li>
+  </ul>
+  <ul class="pagination" ng-if="pagination.noOfPages == 1">
+    <li style="height:34px;">
+      <a>results on page: <input style = "padding:0;" class="pages" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
+    </li>
+  </ul>
