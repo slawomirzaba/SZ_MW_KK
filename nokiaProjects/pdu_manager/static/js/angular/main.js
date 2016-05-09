@@ -234,4 +234,34 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     })
   }
 
+  $scope.switchOffSlot = function(pdu, slot){
+    $http({
+      url: "/pdu_communicator/switch_outlet_off",
+      method: "GET",
+      params: {
+        pdu_ip: pdu.ip,
+        outlet_nr: slot.nr
+      }
+    }).success(function(data, status, headers, config){
+      console.log(data);
+    }).error(function(data, status, headers, config){
+      console.log("error while switch off");
+    })
+  }
+
+  $scope.resetSlot = function(pdu, slot){
+    $http({
+      url: "/pdu_communicator/reset_outlet",
+      method: "GET",
+      params: {
+        pdu_ip: pdu.ip,
+        outlet_nr: slot.nr
+      }
+    }).success(function(data, status, headers, config){
+      console.log(data);
+    }).error(function(data, status, headers, config){
+      console.log("error while reset");
+    })
+  }
+
 }]);
