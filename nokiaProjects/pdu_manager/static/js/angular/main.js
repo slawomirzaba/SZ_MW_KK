@@ -220,6 +220,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.newGroup = angular.copy(group);
   }
   $scope.switchOnSlot = function(pdu, slot){
+    $scope.busy = true;
     $http({
       url: "/pdu_communicator/switch_outlet_on",
       method: "GET",
@@ -229,20 +230,25 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       }
     }).success(function(data, status, headers, config){
       if(data.result == true){
+        $scope.busy = false;
         slot.state = 'active';
         $.notify("Outlet has been activated properly", {position: "top center", className: "success"});
       }
       else
       {
+        $scope.busy = false;
         slot.state = 'active';
         $.notify("Outlet is currently active", {position: "top center", className: "warn"});
       }
     }).error(function(data, status, headers, config){
+      $scope.busy = false;
       $.notify("activation failed", {position: "top center", className: "error"});
+      slot.state = 'unknown';
     })
   }
 
   $scope.switchOffSlot = function(pdu, slot){
+    $scope.busy = true;
     $http({
       url: "/pdu_communicator/switch_outlet_off",
       method: "GET",
@@ -251,13 +257,26 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         outlet_nr: slot.nr
       }
     }).success(function(data, status, headers, config){
-      console.log(data);
+      if(data.result == true){
+        $scope.busy = false;
+        slot.state = 'disable';
+        $.notify("Outlet has been disactivated properly", {position: "top center", className: "success"});
+      }
+      else
+      {
+        $scope.busy = false;
+        slot.state = 'disable';
+        $.notify("Outlet is currently disactive", {position: "top center", className: "warn"});
+      }
     }).error(function(data, status, headers, config){
-      console.log("error while switch off");
+      $scope.busy = false;
+      $.notify("disactivation failed", {position: "top center", className: "error"});
+      slot.state = 'unknown';
     })
   }
 
   $scope.resetSlot = function(pdu, slot){
+    $scope.busy = true;
     $http({
       url: "/pdu_communicator/reset_outlet",
       method: "GET",
@@ -266,9 +285,21 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         outlet_nr: slot.nr
       }
     }).success(function(data, status, headers, config){
-      console.log(data);
+      if(data.result == true){
+        $scope.busy = false;
+        slot.state = 'active';
+        $.notify("Outlet has been reseted properly", {position: "top center", className: "success"});
+      }
+      else
+      {
+        $scope.busy = false;
+        slot.state = 'disable';
+        $.notify("Outlet is currently disactive", {position: "top center", className: "warn"});
+      }
     }).error(function(data, status, headers, config){
-      console.log("error while reset");
+      $scope.busy = false;
+      $.notify("reset failed", {position: "top center", className: "error"});
+      slot.state = 'unknown';
     })
   }
 
