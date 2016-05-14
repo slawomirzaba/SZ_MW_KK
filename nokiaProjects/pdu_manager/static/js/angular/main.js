@@ -228,9 +228,17 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         outlet_nr: slot.nr
       }
     }).success(function(data, status, headers, config){
-      console.log(data);
+      if(data.result == true){
+        slot.state = 'active';
+        $.notify("Outlet has been activated properly", {position: "top center", className: "success"});
+      }
+      else
+      {
+        slot.state = 'active';
+        $.notify("Outlet is currently active", {position: "top center", className: "warn"});
+      }
     }).error(function(data, status, headers, config){
-      console.log("error while switch on");
+      $.notify("activation failed", {position: "top center", className: "error"});
     })
   }
 
