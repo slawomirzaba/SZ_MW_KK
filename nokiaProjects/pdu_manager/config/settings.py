@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'api',
-    'rest_framework',    
+    'rest_framework',
+    'pdu_communicator',
 ]
 
 MIDDLEWARE_CLASSES = [

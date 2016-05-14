@@ -1,6 +1,5 @@
 from django.views.generic import View
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse
 from pdu_communicator.pdu.aten import ATEN
 
 
@@ -9,13 +8,14 @@ class Switch_outlet_on(View):
 
     def get(self, request):
         pdu_ip = request.GET.get("pdu_ip")
-        outlet_nr = request.GET.get("outlet_nr")
-        print pdu_ip + " " + outlet_nr
-        # twoj kod wlaczajacy urzadzenie
-        ip = "192.168.0.60"
-        aten = ATEN(ip, timeout=0.1)
-        aten_oid = aten._build_snmp_oid(8)
-        aten.set_outlet_value(8, 'off')
-        aten.set_outlet_value(8, 'on')
-        text = "PDU" + pdu_id + ": Outlet" + outlet_id + " has been correctly switched on"
-        return HttpResponse(text)
+        outlet_nr = int(request.GET.get("outlet_nr"))
+        aten = ATEN(pdu_ip, timeout=0.1)
+
+        aten_oid = aten._build_snmp_oid(outlet_nr)
+        status = aten.get_outlet_status(outlet_nr)
+        if status == 'off':
+            aten.set_outlet_value(outlet_nr, 'on')
+            #text = "PDU IP {0}: Outlet {1} has been correctly switched on".format(pdu_ip, outlet_nr)
+            return JsonResponse({'result': True})
+        #text = "PDU IP {0}: Outlet {1} is currently switched on".format(pdu_ip, outlet_nr)
+        return JsonResponse({'result': False})
