@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 struct TaskComponent{
@@ -56,7 +57,7 @@ void fillPrevAndNextTech(){
 	}
 }
 
-void updatePrev(vector <Task> & tmpTasks){
+void updatePrevAndNext(vector <Task> & tmpTasks){
 	for(int i = 0; i < tmpTasks.size(); ++i){
 		for(int j = 0; j < tmpTasks[i].components.size(); ++j){
 			tmpTasks[i].components[j].prevTech = -1;
@@ -65,13 +66,15 @@ void updatePrev(vector <Task> & tmpTasks){
 				tmpTasks[i].components[j].prevTech = -1;
 			}
 			else if(j == tmpTasks[i].components.size() - 1){
-				tmpTasks[i].components[j].prevTech = tasks[i].components[j - 1].nr;
+				tmpTasks[i].components[j].prevTech = tmpTasks[i].components[j - 1].nr;
 				tmpTasks[i].components[j].numberOfPrev ++;
 			} 
 			else{
-				tmpTasks[i].components[j].prevTech = tasks[i].components[j - 1].nr;
+				tmpTasks[i].components[j].prevTech = tmpTasks[i].components[j - 1].nr;
 				tmpTasks[i].components[j].numberOfPrev ++;
 			}
+			if(tmpTasks[i].components[j].prevQueue != -1)
+				tmpTasks[i].components[j].numberOfPrev ++;
 		}
 	}
 }
@@ -152,7 +155,7 @@ void designateTopology(vector <Task> tmpTasks, vector <int> & topology, int step
 			}
 		}
 	}
-	updatePrev(tmpTasks);
+	updatePrevAndNext(tmpTasks);
 	if(step >= (numberOfMachines * numberOfTasks) - 1){
 		for(int i = 0; i < numberOfTasks; ++i){
 			for(int j = 0; j < numberOfMachines; ++j){
@@ -179,6 +182,12 @@ void calculateR(vector <int> & topology){
 			tasks[taskIndex].components[componentIndex].R = tasks[taskIndex].components[componentIndex - 1].R 
 			+ tasks[taskIndex].components[componentIndex].time;
 		}
+		else if(tasks[taskIndex].components[componentIndex].numberOfPrev == 2){
+			int tmpTask = tasks[taskIndex].components[componentIndex].prevQueue / numberOfTasks, 
+			tmpComponent = tasks[taskIndex].components[componentIndex].prevQueue % numberOfMachines;;
+			tasks[taskIndex].components[componentIndex].R = max(tasks[taskIndex].components[componentIndex - 1].R, tasks[tmpTask].components[tmpComponent].R) 
+			+ tasks[taskIndex].components[componentIndex].time;
+		}
 	}
 }
 
@@ -198,7 +207,35 @@ void calculateQ(vector <int> & topology){
 			tasks[taskIndex].components[componentIndex].Q = tasks[taskIndex].components[componentIndex + 1].Q 
 			+ tasks[taskIndex].components[componentIndex].time;
 		}
+		else if(tasks[taskIndex].components[componentIndex].nextTech != -1 
+			&& tasks[taskIndex].components[componentIndex].nextQueue != -1){
+			int tmpTask = tasks[taskIndex].components[componentIndex].nextQueue / numberOfTasks, 
+			tmpComponent = tasks[taskIndex].components[componentIndex].nextQueue % numberOfMachines;;
+			tasks[taskIndex].components[componentIndex].Q = max(tasks[taskIndex].components[componentIndex + 1].Q, tasks[tmpTask].components[tmpComponent].Q) 
+			+ tasks[taskIndex].components[componentIndex].time;
+		}
 	}
+}
+
+bool comparatorTime(const TaskComponent& x, const TaskComponent& y) {
+    return x.time > y.time;
+}
+
+
+vector <TaskComponent> sortByTime(vector <Task> tmpTasks){
+	vector <TaskComponent> tmp;
+	for(int i = 0; i < tmpTasks.size(); ++i){
+		for(int j = 0; j < tmpTasks[i].components.size(); ++j){
+			tmp.push_back(tmpTasks[i].components[j]);
+		}
+	}
+	sort(tmp.begin(), tmp.end(), comparatorTime);
+	for(int i = 0; i < numberOfTasks; ++i){
+		for(int j = 0; j < numberOfMachines; ++j){
+			cout << tmp[i * 3 + j].nr << " " << tmp[i * 3 + j].time << endl;
+		}
+	}
+	return tmp;
 }
 
 int main(){
@@ -210,4 +247,5 @@ int main(){
 	calculateR(topology);
 	calculateQ(topology);
 	displayTasks();
+	sortByTime(tasks);
 }
