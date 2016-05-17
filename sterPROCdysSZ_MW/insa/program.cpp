@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <climits>
+#include <fstream>
 
 
 using namespace std;
@@ -29,91 +30,21 @@ void clear(TaskComponent & a){
 }
 
 void loadData(vector < TaskComponent > & tmpComponents){
-	numberOfTasks = numberOfMachines = 4;
+	ifstream file;
+	int tmpNumber;
 	TaskComponent tmp;
 	clear(tmp);
-	tmpComponents.clear();
 
-	tmp.nr = 1;
-	tmp.time = 54;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 2;
-	tmp.time = 34;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 3;
-	tmp.time = 61;
-	tmp.machine = 4;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 4;
-	tmp.time = 2;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 5;
-	tmp.time = 9;
-	tmp.machine = 4;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 6;
-	tmp.time = 15;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 7;
-	tmp.time = 89;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 8;
-	tmp.time = 70;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 9;
-	tmp.time = 38;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 10;
-	tmp.time = 19;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 11;
-	tmp.time = 28;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 12;
-	tmp.time = 87;
-	tmp.machine = 4;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 13;
-	tmp.time = 95;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 14;
-	tmp.time = 34;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 15;
-	tmp.time = 7;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 16;
-	tmp.time = 29;
-	tmp.machine = 4;
-	tmpComponents.push_back(tmp);
-
+	file.open("in0.txt");
+	file >> numberOfTasks >> numberOfMachines >> tmpNumber;
+	for(int i = 0; i < numberOfTasks; ++i){
+		file >> tmpNumber;
+		for(int j = 0; j < numberOfMachines; ++j){
+			file >> tmp.machine >> tmp.time;
+			tmp.nr = i * numberOfTasks + j + 1;
+			tmpComponents.push_back(tmp);
+		}
+	}
 }
 
 void updateNextAndPrevTech(vector < TaskComponent > & tmpComponents){
