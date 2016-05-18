@@ -127,10 +127,16 @@
 
     </div>
   </div>
+  <div class="busy" ng-show="busy == true">
+    <center>
+      <img style="position: fixed;top: 50%;" src="../../static/images/ajax-loader.gif">
+      </center>
+  </div>
 
   <!-- jQuery -->
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <!-- Bootstrap Core JavaScript -->
+  <script src = "{% static 'js/notify.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <!-- Metis Menu Plugin JavaScript -->
   <script src="{% static 'js/metisMenu.min.js' %}"></script>

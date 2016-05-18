@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from pdu_communicator.pdu.aten import ATEN
 
 
-class Switch_outlet_on(View):
+class Switch_outlet_off(View):
     redirect_field_name = None
 
     def get(self, request):
@@ -13,9 +13,9 @@ class Switch_outlet_on(View):
 
         aten_oid = aten._build_snmp_oid(outlet_nr)
         status = aten.get_outlet_status(outlet_nr)
-        if status == 'off':
-            aten.set_outlet_value(outlet_nr, 'on')
-            #text = "PDU IP {0}: Outlet {1} has been correctly switched on".format(pdu_ip, outlet_nr)
+        if status == 'on':
+            aten.set_outlet_value(outlet_nr, 'off')
+            #text = "PDU IP {0}: Outlet {1} has been correctly switched off".format(pdu_ip, outlet_nr)
             return JsonResponse({'result': True})
-        #text = "PDU IP {0}: Outlet {1} is currently switched on".format(pdu_ip, outlet_nr)
+        #text = "PDU IP {0}: Outlet {1} is currently switched off".format(pdu_ip, outlet_nr)
         return JsonResponse({'result': False})

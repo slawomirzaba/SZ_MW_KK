@@ -10,50 +10,50 @@ angular.module('pduApp').factory('repository', [function(){
 		      arraySlots: [
 		        {
 		          id: "1",
-							nr: 1,
-		          state: "active",
+				  nr: 1,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "2",
-							nr: 2,
-		          state: "disable",
+				  nr: 2,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 						{
 		          id: "1",
-							nr: 3,
-		          state: "active",
+				  nr: 3,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "2",
-							nr: 4,
-		          state: "disable",
+				  nr: 4,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 						{
 		          id: "5",
-							nr: 5,
-		          state: "active",
+				  nr: 5,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "6",
-							nr: 6,
-		          state: "disable",
+				  nr: 6,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
-						{
+				{
 		          id: "7",
-							nr: 7,
-		          state: "active",
+				  nr: 7,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 		        {
 		          id: "8",
-							nr: 8,
-		          state: "disable",
+				  nr: 8,
+		          state: "unknown",
 		          descr: "fajny socket"
 		        },
 		      ]

@@ -22,6 +22,7 @@
           <tr ng-show="pdu.dispMoreInfo" ng-repeat-start = "slot in pdu.arraySlots | filter:{selected:true} | orderBy:'nr'" style="background-color: #D2E7FC;">
             <td colspan="4" style="text-align:center;width:60%">
               <span class="tablePduHeader tableIP">Outlet {[{slot.nr}]}:</span> {[{slot.state}]}
+              <div class = "circle" ng-class="{'greenCircle' : slot.state == 'active', 'redCircle': slot.state == 'disable', 'greyCircle' : slot.state == 'unknown'}"></div>
             </td>
             <td style="text-align:center;width:40%">
               <span class="tablePduHeader tableIP">Description: </span>

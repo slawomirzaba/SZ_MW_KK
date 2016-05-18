@@ -97,3 +97,31 @@ button{
 	padding: 1px 6px !important;
     border: none !important;
 }
+.circle{
+	display: inline-block;
+    height: 12px;
+    width: 12px;
+    border-radius: 6px;
+    border: 1px solid black;
+}
+
+.greenCircle{
+	background-color: #0DFC39;
+}
+
+.redCircle{
+	background-color: red;
+}
+
+.greyCircle{
+	background-color: grey;
+}
+.busy{
+	position: fixed;
+	top:0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(220,220,220, 0.4);
+	z-index:200000;
+}
