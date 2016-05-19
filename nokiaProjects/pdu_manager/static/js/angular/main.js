@@ -1,4 +1,4 @@
-var pduApp = angular.module('pduApp', []);
+var pduApp = angular.module('pduApp', ["checklist-model"]);
 pduApp.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
   $interpolateProvider.endSymbol('}]}');
@@ -29,14 +29,15 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     {
       id: 0,
       name: "all",
-      allDevices: angular.copy($scope.arrayPdu)
+      idPdus: [1, 2],
+      idSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     }
   ]
   $scope.templates = ['display_devices', 'display_groups'];
   $scope.init = function(){
     $scope.contentOfTab = $scope.templates[0];
     $scope.selectGroup(0);
-    $scope.filteredPdus = $scope.groups[0].allDevices;
+    $scope.filteredPdus = $scope.selectedGroup.idPdus;
     $scope.pagination = {
       currentPage: 1,
       entryLimit: 1,
@@ -49,12 +50,6 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.contentOfTab = $scope.templates[0];
     if(id == 0){
       $scope.selectedGroup = $scope.groups[0];
-      for(var i = 0 ; i < $scope.selectedGroup.allDevices.length; ++i){
-        $scope.selectedGroup.allDevices[i].selected = true;
-        for(var j = 0 ; j < $scope.selectedGroup.allDevices[i].arraySlots.length; ++j){
-          $scope.selectedGroup.allDevices[i].arraySlots[j].selected = true;
-        }
-      }
     }
     else{
       for(var i = 0; i < $scope.groups.length; i++){
@@ -65,8 +60,8 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       }
     }
   }
-  $scope.selectLabelAdiingGroup = function(pdu){
-    $scope.selectedLabel = pdu.id;
+  $scope.selectLabelAdiingGroup = function(pduId){
+    $scope.selectedLabel = pduId;
   }
   $scope.tooglePduInformations = function(pdu){
     if(pdu.dispMoreInfo != true){
@@ -80,34 +75,23 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.modeGroup = "add";
     $scope.newGroup = {
       id: $scope.maxId() + 1,
-      allDevices: angular.copy($scope.groups[0].allDevices),
-      name: ""
+      name: "",
+      idPdus: [],
+      idSlots: []
     }
-    angular.forEach($scope.newGroup.allDevices, function(d, i){
-      d.selected = false;
-        angular.forEach(d.arraySlots, function(s, j){
-          s.selected = false;
-        });
-    })
-    $scope.selectedLabel = $scope.groups[0].allDevices[0].id;
-  }
-  $scope.addPduToGroup = function(pdu, slot){
-    if(slot.selected == true){
-      pdu.selected = true;
-    }else{
-      var anySlotSelected = false;
-      for(var i = 0; i < pdu.arraySlots.length; ++i){
-        if(pdu.arraySlots[i].selected == true){
-          var anySlotSelected = true;
-          return ;
-        }
-      }
-      pdu.selected = false;
-    }
+    $scope.selectedLabel = 1;
   }
 
   $scope.confirmGroup = function(){
     if($scope.modeGroup == 'add'){
+      for (var pduId in $scope.arrayPdu) {
+        for(var slotId in $scope.arrayPdu[pduId].arraySlots){
+          if($scope.newGroup.idSlots.indexOf(slotId) != -1){
+            $scope.newGroup.idPdus.push(pduId);
+            break;
+          }
+        }
+      }
       $scope.groups.push($scope.newGroup);
       for(var i = 0; i < $scope.groups.length; ++i){
         if($scope.groups[i].id == $scope.newGroup.id){
@@ -120,6 +104,15 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       $('.nav.nav-second-level.collapse').css('height', 'auto');
     }
     else if($scope.modeGroup == 'edit'){
+      $scope.newGroup.idPdus = [];
+      for (var pduId in $scope.arrayPdu) {
+        for(var slotId in $scope.arrayPdu[pduId].arraySlots){
+          if($scope.newGroup.idSlots.indexOf(slotId) != -1){
+            $scope.newGroup.idPdus.push(pduId);
+            break;
+          }
+        }
+      }
       for(var i = 0; i < $scope.groups.length; i++){
         if($scope.groups[i].id == $scope.newGroup.id){
           $scope.groups[i] = angular.copy($scope.newGroup);
@@ -149,11 +142,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }
     $scope.selectedGroup = $scope.groups[0];
   }
-  $scope.test = function(){
-    console.log($scope.groups[0].allDevices.map(function(e) { return e.id; }).indexOf('1'));
-  }
 
-    /* init pagination with $scope.list */
   $scope.getNumberPages = function() {
     return new Array($scope.pagination.noOfPages);
   }
@@ -162,8 +151,9 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       $scope.pagination.currentPage = page;
     }
   }
-  $scope.$watchCollection('filteredPdus', function listener(nVal, oVal){
+  $scope.$watch('selectedGroup', function listener(nVal, oVal){
     if (nVal != oVal){
+      $scope.filteredPdus = $scope.selectedGroup.idPdus;
       $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
       $scope.pagination.currentPage = 1;
     }
@@ -177,45 +167,33 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       //$scope.currentPage = 1;
     }
   })
-  $scope.editPduDescr = function(pdu){
+  $scope.editPduDescr = function(pdu, pduId){
     $scope.descr.editedPduDescrText = angular.copy(pdu.descr);
-    $scope.editedPdu = pdu.id;
+    $scope.editedPdu = pduId;
   }
   $scope.confirmDescr = function(pdu){
     $scope.editedPdu = undefined;
-    angular.forEach($scope.groups, function(g, i){
-      var index = g.allDevices.map(function(e) { return e.id; }).indexOf(pdu.id);
-      if (index != -1)
-        g.allDevices[index].descr = $scope.descr.editedPduDescrText;
-    });
+    pdu.descr = $scope.descr.editedPduDescrText
   }
-  $scope.rejectDescr = function(id){
+  $scope.rejectDescr = function(){
     $scope.editedPdu = undefined;
   }
-  $scope.editSlotDescr = function(slot, pduId){
+  $scope.editSlotDescr = function(slot, pduId, slotId){
     $scope.descr.editedSlotDescrText = angular.copy(slot.descr);
-    $scope.editedslot = slot.id;
+    $scope.editedslot = slotId;
     $scope.editedSlotFromPdu = pduId;
   }
-  $scope.rejectSlotDescr = function(id){
+  $scope.rejectSlotDescr = function(){
     $scope.editedslot = undefined;
     $scope.editedSlotFromPdu = undefined;
   }
-  $scope.confirmSlot = function(slot, pdu){
+  $scope.confirmSlot = function(slot){
     $scope.editedslot = undefined;
     $scope.editedSlotFromPdu = undefined;
-    angular.forEach($scope.groups, function(g, i){
-      var index = g.allDevices.map(function(e) { return e.id; }).indexOf(pdu.id);
-      if (index != -1){
-        angular.forEach(g.allDevices[index].arraySlots, function(s, j){
-          if(slot.id == s.id)
-            s.descr = $scope.descr.editedSlotDescrText
-        });
-      }
-    });
+    slot.descr = $scope.descr.editedSlotDescrText;
   }
   $scope.editGroup = function(group){
-    $scope.selectedLabel = $scope.groups[0].allDevices[0].id;
+    $scope.selectedLabel = 1;
     $scope.modeGroup = "edit";
     $scope.newGroup = angular.copy(group);
   }

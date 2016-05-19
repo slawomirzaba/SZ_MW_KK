@@ -14,6 +14,7 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src = "{% static 'js/angular/checklist-model.js' %}"></script>
   <script src = "{% static 'js/angular/ui-bootstrap-tpls-0.2.0.js' %}"></script>
   <script src = "{% static 'js/angular/main.js' %}"></script>
   <script src = "{% static 'js/angular/services/repository.js' %}"></script>
@@ -31,7 +32,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="index.html"><img style="height:40px;width:150px;" src="../../static/images/logo.png"></a>
+              <a class="navbar-brand" href="#"><img style="height:40px;width:150px;" src="../../static/images/logo.png"></a>
           </div>
           <!-- /.navbar-header -->
 
@@ -109,11 +110,13 @@
             <label for="groupName">Name:</label>
             <input type="text" class="form-control" id="groupName" ng-model = "newGroup.name">
           </div>
-          <div class = "barGroups" ng-repeat="pdu in newGroup.allDevices" ng-class="selectedLabel == pdu.id? 'open': ''">
-            <span ng-click="selectLabelAdiingGroup(pdu);" class="label label-info headerMenuGroup" style="display:block;margin-top:10px;cursor:pointer;"> {[{pdu.name}]}: {[{pdu.ip}]} <i ng-class="selectedLabel == pdu.id? 'fa fa-angle-up': 'fa fa-angle-down'"></i> </span>
+          <div class = "barGroups" ng-repeat="(pduId, pdu) in arrayPdu" ng-class="selectedLabel == pduId? 'open': ''">
+            <span ng-click="selectLabelAdiingGroup(pduId);" class="label label-info headerMenuGroup" style="display:block;margin-top:10px;cursor:pointer;"> {[{pdu.name}]}: {[{pdu.ip}]} <i ng-class="selectedLabel == pduId? 'fa fa-angle-up': 'fa fa-angle-down'"></i> </span>
             <div class = "showMenuAddingGroup">
-              <div class="checkbox" ng-repeat="slot in pdu.arraySlots">
-                <label><input type="checkbox" ng-change="addPduToGroup(pdu, slot);" ng-model = "slot.selected">Slot {[{slot.nr}]}</label>
+              <div class="checkbox" ng-repeat="(slotId, slot) in pdu.arraySlots">
+                <label>
+                  <input type="checkbox" checklist-value="slotId" checklist-model="newGroup.idSlots">Slot {[{slot.nr}]}
+                </label>
               </div>
             </div>
           </div>
