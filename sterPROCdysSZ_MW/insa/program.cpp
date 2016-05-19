@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <climits>
+#include <fstream>
 
 
 using namespace std;
@@ -29,56 +30,21 @@ void clear(TaskComponent & a){
 }
 
 void loadData(vector < TaskComponent > & tmpComponents){
-	numberOfTasks = numberOfMachines = 3;
+	ifstream file;
+	int tmpNumber;
 	TaskComponent tmp;
 	clear(tmp);
-	tmpComponents.clear();
 
-	tmp.nr = 1;
-	tmp.time = 10;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 2;
-	tmp.time = 15;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 3;
-	tmp.time = 7;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 4;
-	tmp.time = 20;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 5;
-	tmp.time = 17;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 6;
-	tmp.time = 8;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 7;
-	tmp.time = 9;
-	tmp.machine = 1;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 8;
-	tmp.time = 10;
-	tmp.machine = 2;
-	tmpComponents.push_back(tmp);
-
-	tmp.nr = 9;
-	tmp.time = 14;
-	tmp.machine = 3;
-	tmpComponents.push_back(tmp);
-
+	file.open("in0.txt");
+	file >> numberOfTasks >> numberOfMachines >> tmpNumber;
+	for(int i = 0; i < numberOfTasks; ++i){
+		file >> tmpNumber;
+		for(int j = 0; j < numberOfMachines; ++j){
+			file >> tmp.machine >> tmp.time;
+			tmp.nr = i * numberOfTasks + j + 1;
+			tmpComponents.push_back(tmp);
+		}
+	}
 }
 
 void updateNextAndPrevTech(vector < TaskComponent > & tmpComponents){
@@ -138,6 +104,7 @@ int findIndex(vector <TaskComponent> tmpComponents, int nr){
 			return i;
 		}
 	}
+	return -1;
 }
 
 void removeComponents(vector < TaskComponent > & tmpComponents, vector <int> toDelete){
@@ -145,16 +112,18 @@ void removeComponents(vector < TaskComponent > & tmpComponents, vector <int> toD
 	for(int i = 0; i < tmpComponents.size(); ++i){
 		for(int j = 0 ; j < toDelete.size(); ++j){
 			if(toDelete[j] == tmpComponents[i].nr){
-				if(tmpComponents[i + 1].prevTech != 0){
+				if(((i + 1) < tmpComponents.size()) && tmpComponents[i + 1].prevTech != 0){
 					tmpComponents[i + 1].prevTech = 0;
 				}
 				if(tmpComponents[i].nextQueue != 0){
 					index = findIndex(tmpComponents, tmpComponents[i].nextQueue);
-					tmpComponents[index].prevQueue = 0;
+					if(index != -1)
+						tmpComponents[index].prevQueue = 0;
 				}
 				if(tmpComponents[i].prevQueue != 0){
 					index = findIndex(tmpComponents, tmpComponents[i].prevQueue);
-					tmpComponents[index].nextQueue = 0;
+					if(index != -1)
+						tmpComponents[index].nextQueue = 0;
 				}
 				tmpComponents.erase(tmpComponents.begin() + i);
 			}
@@ -162,27 +131,20 @@ void removeComponents(vector < TaskComponent > & tmpComponents, vector <int> toD
 	}
 }
 
-void designateTopology(vector < TaskComponent > tmpComponents, vector <int> & topology, int step){
+void designateTopology(vector < TaskComponent > tmpComponents, vector <int> & topology){
 	vector <int> toDelete;
 	for(int i = 0; i < tmpComponents.size(); ++i){
 		if(numberOfPrevious(tmpComponents[i]) == 0){
 			topology.push_back(tmpComponents[i].nr);
 			toDelete.push_back(tmpComponents[i].nr);
-			step ++;
 		}
 	}
 	removeComponents(tmpComponents, toDelete);
-	if(step >= (numberOfMachines * numberOfTasks) - 1){
-		for(int i = 0; i < numberOfTasks; ++i){
-			for(int j = 0; j < numberOfMachines; ++j){
-				cout << topology[i * 3 + j] << " ";
-			}
-		}
-		cout << endl;
+	if(tmpComponents.empty()){
 		return;
 	}
 	else{
-		designateTopology(tmpComponents, topology, step);
+		designateTopology(tmpComponents, topology);
 	}
 		
 }
@@ -341,67 +303,18 @@ int main(){
 	loadData(components);
 	updateNextAndPrevTech(components);
 	initialiseMachines();
-	designateTopology(components, topology, 0);
-	calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	//sortedComponents.erase(sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
+	do{
+		topology.clear();
+		designateTopology(components, topology);
+		calculateR(components, topology);
+		calculateQ(components, topology);
+		sortedComponents = sortComponentsByTime(components);
+		if(alreadyOnMachine > 0)
+			sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
+		if(sortedComponents.empty())
+			break;
+		putTask(sortedComponents, components);
+	}while(!sortedComponents.empty());
 	displayMachines();
 	displayTasks(components);
-
-	topology.clear();
-	designateTopology(components, topology, 0);
-	calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	cout << alreadyOnMachine << endl;
-	sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
-	displayMachines();
-	displayTasks(components);
-
-	topology.clear();
-	designateTopology(components, topology, 0);
-	/*calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	cout << alreadyOnMachine << endl;
-	sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
-	displayMachines();
-	displayTasks(sortedComponents);
-
-	topology.clear();
-	designateTopology(components, topology, 0);
-	calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	cout << alreadyOnMachine << endl;
-	sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
-	displayMachines();
-	displayTasks(sortedComponents);
-
-	topology.clear();
-	designateTopology(components, topology, 0);
-	calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	cout << alreadyOnMachine << endl;
-	sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
-	displayMachines();
-	displayTasks(sortedComponents);
-
-	topology.clear();
-	designateTopology(components, topology, 0);
-	calculateR(components, topology);
-	calculateQ(components, topology);
-	sortedComponents = sortComponentsByTime(components);
-	cout << alreadyOnMachine << endl;
-	sortedComponents.erase(sortedComponents.begin(),sortedComponents.begin() + alreadyOnMachine);
-	putTask(sortedComponents, components);
-	displayMachines();
-	displayTasks(sortedComponents);*/
 }
