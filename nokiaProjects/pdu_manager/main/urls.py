@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'login/$', Login_by_LDAP.as_view(), name='login_by_ldap'),
     url(r'logout/$', logout, {'next_page': '/'}, name='logout'),
     url(r'display_devices/$', TemplateView.as_view(template_name='main/display_devices.html')),
-    url(r'display_groups/$', TemplateView.as_view(template_name='main/display_groups.html'))
+    url(r'display_groups/$', TemplateView.as_view(template_name='main/display_groups.html')),
 ]

@@ -17,9 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 import main.urls as main_urls
 import pdu_communicator.urls as pdu_communicator_urls
+import api.urls as api_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(main_urls, namespace='main')),
     url(r'^pdu_communicator/', include(pdu_communicator_urls, namespace = 'pdu_communicator')),
+    url(r'^api/', include(api_urls, namespace = 'api')),
 ]
