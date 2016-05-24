@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <climits>
 #include <fstream>
-
+#include <ctime>
 
 using namespace std;
 
@@ -20,10 +20,12 @@ struct TaskComponent{
 	int Q;
 };
 
+const int & max (const int & a, const int & b) {
+  return (a<b)?b:a;
+}
+
 vector < vector < int > > machines;
-int numberOfMachines, numberOfTasks;
-int alreadyOnMachine = 0;
-int cMax;
+int numberOfMachines, numberOfTasks, alreadyOnMachine = 0, cMax;
 
 void clear(TaskComponent & a){
 	a.time = a.machine = a.R = a.Q = 0;
@@ -51,13 +53,17 @@ void designateNextAndPrevTech(vector < TaskComponent > & components){
 	}
 }
 
-void loadData(vector < TaskComponent > & components){
-	ifstream file;
+void loadData(vector < TaskComponent > & components, ifstream & file){
+	alreadyOnMachine = numberOfTasks = numberOfMachines = 0;
+	machines.clear();
+	char tmpChar;
 	int tmpNumber;
 	TaskComponent tmp;
 	clear(tmp);
 	components.push_back(tmp);
-	file.open("in0.txt");
+	for(int i = 0; i < 9; ++i){
+		file >> tmpChar;
+	}
 	file >> numberOfTasks >> numberOfMachines >> tmpNumber;
 	for(int i = 0; i < numberOfTasks; ++i){
 		file >> tmpNumber;
@@ -67,10 +73,17 @@ void loadData(vector < TaskComponent > & components){
 			components.push_back(tmp);
 		}
 	}
+	for(int i = 0; i < 5; ++i){
+		file >> tmpChar;
+	}
+	file >> tmpNumber;
+	for(int i = 0; i < numberOfTasks * numberOfMachines; ++i){
+		file >> tmpNumber;
+	}
 	designateNextAndPrevTech(components);
 }
 
-void displayTasks(vector < TaskComponent > & components){
+void displayTasks(const vector < TaskComponent > & components){
 	cout << "zadanie\tmaszyna\tczas\tpopTech\tnasTech\tpopKol\tnastKol\tR\tQ\n";
 	for(int i = 0; i < components.size(); ++i){
 		cout << components[i].nr << "\t" << components[i].machine 
@@ -81,7 +94,7 @@ void displayTasks(vector < TaskComponent > & components){
 	}
 }
 
-void calculateMatrixR(vector <TaskComponent> & components, vector <TaskComponent> topology){
+void calculateMatrixR(vector <TaskComponent> & components, const vector <TaskComponent> & topology){
 	cMax = 0;
 	int indexPrevTech, indexPrevQueue;
 	for(int i = 1; i < topology.size(); ++i){
@@ -93,7 +106,7 @@ void calculateMatrixR(vector <TaskComponent> & components, vector <TaskComponent
 	}
 }
 
-void calculateMatrixQ(vector <TaskComponent> & components, vector <TaskComponent> topology){
+void calculateMatrixQ(vector <TaskComponent> & components, const vector <TaskComponent> & topology){
 	int indexNextTech, indexNextQueue;
 	for(int i = topology.size() - 1; i >= 1; --i){
 		indexNextTech = components[topology[i].nr].nextTech;
@@ -102,7 +115,7 @@ void calculateMatrixQ(vector <TaskComponent> & components, vector <TaskComponent
 	}
 }
 
-bool comparatorTime(const TaskComponent& x, const TaskComponent& y) {
+bool comparatorTime(const TaskComponent & x, const TaskComponent & y) {
 	if(x.time == y.time)
 		return x.nr < y.nr;
 	else
@@ -123,13 +136,13 @@ void initialiseMachines(){
 	}
 }
 
-void displayMachines(){
+void displayMachines(ofstream & fileOutput){
 	for(int i = 0; i < machines.size(); ++i){
-		cout << "machine" << i + 1 << ": ";
+		fileOutput << "machine" << i + 1 << ": ";
 		for(int j = 0; j < machines[i].size(); ++j){
-			cout << machines[i][j] << " " ;
+			fileOutput << machines[i][j] << " " ;
 		}
-		cout << endl;
+		fileOutput << endl;
 	}
 }
 
@@ -142,7 +155,7 @@ int max(int a, int b, int c, int d){
 	return maxValue;
 }
 
-void designateBestPosition(TaskComponent & task, int indexMachine, vector <TaskComponent> & components){
+void designateBestPosition(TaskComponent & task, const int & indexMachine, vector <TaskComponent> & components){
 	int min = INT_MAX, way1, way2, way3, way4, maxValue, correctPrevQueue, correctNextQueue, correctIndex;
 	int indexPrevTech, indexNextTech, indexPrevQueue, indexNextQueue;
 	for(int i = 0; i <= machines[indexMachine].size(); ++i){
@@ -173,7 +186,7 @@ void designateBestPosition(TaskComponent & task, int indexMachine, vector <TaskC
 	machines[indexMachine].insert(machines[indexMachine].begin() + correctIndex, task.nr);
 }
 
-void putTaskOnMachine(vector <TaskComponent> & components, vector <TaskComponent> componentsSortedByTime){
+void putTaskOnMachine(vector <TaskComponent> & components, const vector <TaskComponent> & componentsSortedByTime){
 	int indexMachine;
 	for(int i = 0; i < componentsSortedByTime.size(); ++i){
 		indexMachine = componentsSortedByTime[i].machine - 1;
@@ -211,23 +224,38 @@ vector <TaskComponent> designateTopology(vector <TaskComponent> components){
 }
 
 int main(){
+	clock_t start;
+  	double t, allTime = 0;
+	ifstream file;
+	ofstream fileOutput;
 	vector <TaskComponent> components, componentsSortedByTime, topology;
-	loadData(components);
-	initialiseMachines();
-	while(1){
-		topology = designateTopology(components);
-		calculateMatrixR(components, topology);
-		calculateMatrixQ(components, topology);
-		componentsSortedByTime = sortComponentsByTime(components);
-		if(alreadyOnMachine > 0)
-			componentsSortedByTime.erase(componentsSortedByTime.begin(),componentsSortedByTime.begin() + alreadyOnMachine);
-		if(componentsSortedByTime.size() < 2)
-			break;
-		putTaskOnMachine(components, componentsSortedByTime);
+	file.open("in0.txt");
+	fileOutput.open("output.txt");
+	for(int  i = 0; i <= 80; ++i){
+		topology.clear();
+		componentsSortedByTime.clear();
+		components.clear();
+		loadData(components, file);
+		initialiseMachines();
+		start = clock();
+		while(1){
+			topology = designateTopology(components);
+			calculateMatrixR(components, topology);
+			calculateMatrixQ(components, topology);
+			componentsSortedByTime = sortComponentsByTime(components);
+			if(alreadyOnMachine > 0)
+				componentsSortedByTime.erase(componentsSortedByTime.begin(),componentsSortedByTime.begin() + alreadyOnMachine);
+			if(componentsSortedByTime.size() < 2)
+				break;
+			putTaskOnMachine(components, componentsSortedByTime);
+		}
+		t = (double)(clock() - start)/ CLOCKS_PER_SEC;
+		allTime += t;
+		cout << "\ndata " << i << ": "<< cMax <<endl << endl;
+		fileOutput << "\ndata " << i << ": "<< cMax <<endl << endl;
+		displayMachines(fileOutput);
 	}
-	//calculateMatrixR(components);
-	displayMachines();
-	displayTasks(components);
-	cout << cMax <<endl;
-
+	cout << "\nlaczny czas: " << allTime <<endl;
+	file.close();
+	fileOutput.close();
 }
