@@ -1,30 +1,43 @@
-<div ng-repeat="pduId in filteredPdus | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit">
+<div ng-repeat="pduId in filteredPdus | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit | orderBy: pduId">
     <table class="table table-bordered pduTable">
         <tbody>
           <tr class = "headerRow">
             <td colspan="2" style="text-align:center;width:30%"><span class="tablePduHeader">PDU Name:</span></td>
             <td colspan="2" style="text-align:center;width:30%"><span class="tablePduHeader">Ip:</span></td>
             <td style="text-align:center;width:40%"><span class="tablePduHeader">Description:</span></td>
+            <td ng-if="editedPdu == pduId || editedslot != undefined"></td>
+            <td ng-if="editedPdu == pduId || editedslot != undefined"></td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:center;"> {[{arrayPdu[pduId].name}]} </td>
             <td colspan="2" style="text-align:center;"> {[{arrayPdu[pduId].ip}]} </td>
-            <td ng-if="editedPdu != pduId">
+            <td ng-if="editedPdu != pduId && editedslot == undefined" >
+                <i ng-click = "editPduDescr(arrayPdu[pduId], pduId)" class="fa fa-pencil" aria-hidden="true"></i>
+              <div style="display:inline-block; width: 90%">{[{arrayPdu[pduId].descr}]}</div>
+            </td>
+            <td colspan="3" ng-if="editedPdu != pduId && editedslot != undefined" >
                 <i ng-click = "editPduDescr(arrayPdu[pduId], pduId)" class="fa fa-pencil" aria-hidden="true"></i>
               <div style="display:inline-block; width: 90%">{[{arrayPdu[pduId].descr}]}</div>
             </td>
             <td ng-if="editedPdu == pduId">
               <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
-              <i ng-click="confirmDescr(arrayPdu[pduId])" class="fa fa-check" aria-hidden="true"></i>
-              <i ng-click="rejectDescr()" class="fa fa-ban" aria-hidden="true"></i>
+            </td>
+            <td ng-if="editedPdu == pduId">
+              <span>confirm</span><i ng-click="confirmDescr(arrayPdu[pduId])" class="fa fa-check" aria-hidden="true"></i>
+            </td>
+            <td ng-if="editedPdu == pduId">
+              reject<i ng-click="rejectDescr()" class="fa fa-ban" aria-hidden="true"></i>
             </td>
           </tr>
-          <tr ng-show="arrayPdu[pduId].dispMoreInfo && arrayPdu[pduId].arraySlots[slotId] != undefined" ng-repeat-start = "slotId in selectedGroup.idSlots" style="background-color: #D2E7FC;">
+          <tr ng-show="arrayPdu[pduId].dispMoreInfo && arrayPdu[pduId].arraySlots[slotId] != undefined" ng-repeat-start = "slotId in selectedGroup.idSlots | orderBy: slotId" style="background-color: #D2E7FC;">
             <td colspan="4" style="text-align:center;width:60%">
               <span class="tablePduHeader tableIP">Outlet {[{arrayPdu[pduId].arraySlots[slotId].nr}]}:</span> {[{arrayPdu[pduId].arraySlots[slotId].state}]}
               <div class = "circle" ng-class="{'greenCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'active', 'redCircle': arrayPdu[pduId].arraySlots[slotId].state == 'disable', 'greyCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'unknown'}"></div>
             </td>
-            <td style="text-align:center;width:40%">
+            <td colspan="3" style="text-align:center;width:40%" ng-if="editedslot != undefined || editedPdu != undefined">
+              <span class="tablePduHeader tableIP">Description: </span>
+            </td>
+            <td style="text-align:center;width:40%" ng-if="editedslot == undefined && editedPdu == undefined">
               <span class="tablePduHeader tableIP">Description: </span>
             </td>
           </tr>
@@ -33,16 +46,26 @@
             <td style="text-align:center;width:15%"><button type="button" ng-click = "switchOffSlot(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-danger">Switch off</button></td>
             <td style="text-align:center;width:15%"> <button type="button" ng-click = "resetSlot(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-primary">Reboot</button></td>
             <td style="text-align:center;width:15%"><button type="button" class="btn btn-info">Check state</button></td>
-            <td ng-if="editedslot != slotId">
-              <span class="tablePduHeader">
+            <td colspan="3" ng-if="editedslot != slotId && editedPdu == undefined">
+              <span class="tablePduHeader ">
+                <i ng-click = "editSlotDescr(arrayPdu[pduId].arraySlots[slotId], pduId, slotId)" class="fa fa-pencil" aria-hidden="true"></i>
+              </span>
+              <div style="display:inline-block; width: 90%">{[{arrayPdu[pduId].arraySlots[slotId].descr}]}</div>
+            </td>
+            <td colspan="3" ng-if="editedslot != slotId && editedPdu != undefined">
+              <span class="tablePduHeader ">
                 <i ng-click = "editSlotDescr(arrayPdu[pduId].arraySlots[slotId], pduId, slotId)" class="fa fa-pencil" aria-hidden="true"></i>
               </span>
               <div style="display:inline-block; width: 90%">{[{arrayPdu[pduId].arraySlots[slotId].descr}]}</div>
             </td>
             <td ng-if="editedslot == slotId">
               <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
-              <i ng-click="confirmSlot(arrayPdu[pduId].arraySlots[slotId])" class="fa fa-check" aria-hidden="true"></i>
-              <i ng-click="rejectSlotDescr()" class="fa fa-ban" aria-hidden="true"></i>
+            </td>
+            <td ng-if="editedslot == slotId">
+              <span>confirm</span><i ng-click="confirmSlot(arrayPdu[pduId].arraySlots[slotId])" class="fa fa-check" aria-hidden="true"></i>
+            </td>
+            <td ng-if="editedslot == slotId">
+              reject<i ng-click="rejectSlotDescr()" class="fa fa-ban" aria-hidden="true"></i>
             </td>
           </tr>
         </tbody>
