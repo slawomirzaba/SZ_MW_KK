@@ -6,26 +6,10 @@
             <td style="text-align:center;"><span class="tablePduHeader">Owner</span></td>
             <td></td>
           </tr>
-          <tr>
-          	<td>1</td>
-          	<td style="text-align:center;"> moja grupa </td>
-            <td style="text-align:center;"> Slawek </td>
-            <td>
-            	<button type="button" class="btn btn-info">Add to your groups</button>
-            </td>
-          <tr>
-          <tr>
-          	<td>2</td>
-          	<td style="text-align:center;"> moja grupa </td>
-            <td style="text-align:center;"> Slawek </td>
-            <td>
-            	<button type="button" class="btn btn-info">Add to your groups</button>
-            </td>
-          <tr>
-          <tr>
-          	<td>3</td>
-          	<td style="text-align:center;"> moja grupa </td>
-            <td style="text-align:center;"> Slawek </td>
+          <tr ng-repeat="group in allGroups">
+          	<td>{[{ $index }]}</td>
+          	<td style="text-align:center;"> {[{ group.name }]} </td>
+            <td style="text-align:center;"> {[{ group.owner.user_name }]} </td>
             <td>
             	<button type="button" class="btn btn-info">Add to your groups</button>
             </td>

@@ -23,28 +23,67 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     editedPduDescrText: "",
     editedSlotDescrText: ""
   }
-  $scope.arrayPdu = repository.arrayPdu;
-
+  $scope.arrayPdu = {};
   $scope.groups = [
     {
       id: 0,
       name: "all",
-      idPdus: [1, 2],
-      idSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      idPdus: [],
+      idSlots: []
     }
   ]
   $scope.templates = ['display_devices', 'display_groups'];
+
+  $scope.loadAllDevices = function(){
+    $http({
+      url: "/api/pdus/",
+      method: "GET",
+    }).success(function(data, status, headers, config){
+      for(var i = 0; i < data.length; ++i){
+        var element = {
+          name: data[i].name,
+          ip: data[i].ip,
+          descr: data[i].description,
+          arraySlots: {}
+        }
+        $scope.arrayPdu[data[i].id] = element;
+        $scope.groups[0].idPdus.push(data[i].id);
+      }
+    }).error(function(data, status, headers, config){
+      console.log("error");
+    })
+
+    $http({
+      url: "/api/outlets/",
+      method: "GET",
+    }).success(function(data, status, headers, config){
+      for(var i = 0; i < data.length; ++i){
+        var element = {
+          nr: i + 1,
+          state: "unknown",
+          descr: data[i].description,
+          pduId: data[i].pdu.id
+        }
+        $scope.arrayPdu[data[i].pdu.id].arraySlots[data[i].id] = element;
+        $scope.groups[0].idSlots.push(data[i].id);
+        $scope.selectGroup(0);
+        $scope.filteredPdus = $scope.selectedGroup.idPdus;
+        $scope.pagination = {
+          currentPage: 1,
+          entryLimit: 1,
+          noOfPages: 0,
+          limitPages: 5
+        };
+        $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
+      }
+    }).error(function(data, status, headers, config){
+      console.log("error");
+    })
+  }
+
   $scope.init = function(){
+    $scope.loadAllDevices();
     $scope.contentOfTab = $scope.templates[0];
-    $scope.selectGroup(0);
-    $scope.filteredPdus = $scope.selectedGroup.idPdus;
-    $scope.pagination = {
-      currentPage: 1,
-      entryLimit: 1,
-      noOfPages: 0,
-      limitPages: 5
-    };
-    $scope.pagination.noOfPages = Math.ceil($scope.filteredPdus.length/$scope.pagination.entryLimit);
   }
   $scope.selectGroup = function(id){
     $scope.contentOfTab = $scope.templates[0];
@@ -278,6 +317,18 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       $scope.busy = false;
       $.notify("reset failed", {position: "top center", className: "error"});
       slot.state = 'unknown';
+    })
+  }
+  $scope.displayAllGroups = function(){
+    $scope.contentOfTab = $scope.templates[1];
+
+    $http({
+      url: "/api/groups/",
+      method: "GET",
+    }).success(function(data, status, headers, config){
+      $scope.allGroups = data;
+    }).error(function(data, status, headers, config){
+      console.log("error");
     })
   }
 

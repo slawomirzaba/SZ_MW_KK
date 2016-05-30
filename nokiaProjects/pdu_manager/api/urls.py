@@ -18,9 +18,9 @@ from api.views.Group_detail import Group_detail
 urlpatterns = [
     url(r'^users/$', Listing_User.as_view(), name = 'users'),
     url(r'^type_pdu/$',  Listing_Type_pdu.as_view(),name = 'type_pdu'),
-    url(r'^pdu/$',  Listing_Pdu.as_view(), name = 'pdu'),
-    url(r'^group/$',  Listing_Group.as_view(), name = 'group'),
-    url(r'^outlet/$',  Listing_Outlet.as_view(), name = 'outlet'),
+    url(r'^pdus/$',  Listing_Pdu.as_view(), name = 'pdus'),
+    url(r'^groups/$',  Listing_Group.as_view(), name = 'groups'),
+    url(r'^outlets/$',  Listing_Outlet.as_view(), name = 'outlets'),
     url(r'^type_user_action/$',  Listing_Type_user_action.as_view(), name = 'type_user_action'),
     url(r'^user_action/$',  Listing_User_action.as_view(), name = 'user_action'),
     url(r'^users/(?P<id>[0-9]+)/$',  User_detail.as_view(), name = 'user_detail'),
