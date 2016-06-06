@@ -248,14 +248,14 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }).success(function(data, status, headers, config){
       if(data.result == true){
         $scope.busy = false;
-        slot.state = 'active';
-        $.notify("Outlet has been activated properly", {position: "top center", className: "success"});
+        slot.state = 'enabled';
+        $.notify("Outlet has been enabled properly", {position: "top center", className: "success"});
       }
       else
       {
         $scope.busy = false;
-        slot.state = 'active';
-        $.notify("Outlet is currently active", {position: "top center", className: "warn"});
+        slot.state = 'enabled';
+        $.notify("Outlet is currently enabled", {position: "top center", className: "warn"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;
@@ -276,18 +276,18 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }).success(function(data, status, headers, config){
       if(data.result == true){
         $scope.busy = false;
-        slot.state = 'disable';
-        $.notify("Outlet has been disactivated properly", {position: "top center", className: "success"});
+        slot.state = 'disabled';
+        $.notify("Outlet has been disabled properly", {position: "top center", className: "success"});
       }
       else
       {
         $scope.busy = false;
-        slot.state = 'disable';
-        $.notify("Outlet is currently disactive", {position: "top center", className: "warn"});
+        slot.state = 'disabled';
+        $.notify("Outlet is currently disabled", {position: "top center", className: "warn"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;
-      $.notify("disactivation failed", {position: "top center", className: "error"});
+      $.notify("deactivation failed", {position: "top center", className: "error"});
       slot.state = 'unknown';
     })
   }
@@ -304,14 +304,14 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }).success(function(data, status, headers, config){
       if(data.result == true){
         $scope.busy = false;
-        slot.state = 'active';
+        slot.state = 'enabled';
         $.notify("Outlet has been reseted properly", {position: "top center", className: "success"});
       }
       else
       {
         $scope.busy = false;
-        slot.state = 'disable';
-        $.notify("Outlet is currently disactive", {position: "top center", className: "warn"});
+        slot.state = 'disabled';
+        $.notify("Outlet is currently disabled", {position: "top center", className: "warn"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;
@@ -329,16 +329,16 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         outlet_nr: slot.nr
       }
     }).success(function(data, status, headers, config){
-      if(data.result == true){
+      if(data.result == "on"){
         $scope.busy = false;
-        slot.state = 'active';
-        $.notify("Outlet is currently active", {position: "top center", className: "success"});
+        slot.state = 'enabled';
+        $.notify("Outlet is currently enabled", {position: "top center", className: "success"});
       }
       else
       {
         $scope.busy = false;
-        slot.state = 'disable';
-        $.notify("Outlet is currently active", {position: "top center", className: "success"});
+        slot.state = 'disabled';
+        $.notify("Outlet is currently disabled", {position: "top center", className: "success"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;

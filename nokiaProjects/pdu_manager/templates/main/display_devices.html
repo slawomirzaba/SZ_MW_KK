@@ -32,7 +32,7 @@
           <tr ng-show="arrayPdu[pduId].dispMoreInfo && arrayPdu[pduId].arraySlots[slotId] != undefined" ng-repeat-start = "slotId in selectedGroup.idSlots | orderBy: slotId" style="background-color: #D2E7FC;">
             <td colspan="4" style="text-align:center;width:60%">
               <span class="tablePduHeader tableIP">Outlet {[{arrayPdu[pduId].arraySlots[slotId].nr}]}:</span> {[{arrayPdu[pduId].arraySlots[slotId].state}]}
-              <div class = "circle" ng-class="{'greenCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'active', 'redCircle': arrayPdu[pduId].arraySlots[slotId].state == 'disable', 'greyCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'unknown'}"></div>
+              <div class = "circle" ng-class="{'greenCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'enabled', 'redCircle': arrayPdu[pduId].arraySlots[slotId].state == 'disabled', 'greyCircle' : arrayPdu[pduId].arraySlots[slotId].state == 'unknown'}"></div>
             </td>
             <td colspan="3" style="text-align:center;width:40%" ng-if="editedslot != undefined || editedPdu != undefined">
               <span class="tablePduHeader tableIP">Description: </span>
