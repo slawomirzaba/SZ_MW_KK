@@ -45,7 +45,7 @@
             <td style="text-align:center;width:15%"><button type="button" ng-click = "switchOnSlot(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-success">Switch on</button></td>
             <td style="text-align:center;width:15%"><button type="button" ng-click = "switchOffSlot(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-danger">Switch off</button></td>
             <td style="text-align:center;width:15%"> <button type="button" ng-click = "resetSlot(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-primary">Reboot</button></td>
-            <td style="text-align:center;width:15%"><button type="button" class="btn btn-info">Check state</button></td>
+            <td style="text-align:center;width:15%"><button type="button" ng-click = "checkState(arrayPdu[pduId], arrayPdu[pduId].arraySlots[slotId]);" class="btn btn-info">Check state</button></td>
             <td colspan="3" ng-if="editedslot != slotId && editedPdu == undefined">
               <span class="tablePduHeader ">
                 <i ng-click = "editSlotDescr(arrayPdu[pduId].arraySlots[slotId], pduId, slotId)" class="fa fa-pencil" aria-hidden="true"></i>
@@ -90,11 +90,11 @@
       <a href="#">last</a>
     </li>
     <li style="height:34px;">
-      <a>results on page: <input class="pages" style = "padding:0;" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
+      <a>results on page: <input id="pageNumberInput" my-enter = "confirmNumberOfPages()" class="pages" style = "padding:0;" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
     </li>
   </ul>
   <ul class="pagination" ng-if="pagination.noOfPages == 1">
     <li style="height:34px;">
-      <a>results on page: <input style = "padding:0;" class="pages" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
+      <a>results on page: <input id="pageNumberInput" my-enter = "confirmNumberOfPages()" style = "padding:0;" class="pages" type="text" ng-model = "pagination.entryLimit" ng-model-options="{ updateOn: 'blur' }"></a>
     </li>
   </ul>

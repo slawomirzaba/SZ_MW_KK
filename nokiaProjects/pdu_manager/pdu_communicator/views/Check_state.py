@@ -13,4 +13,4 @@ class Check_state(View):
 
 		aten_oid = aten._build_snmp_oid(outlet_nr)
 		status = aten.get_outlet_status(outlet_nr)
-		return JsonResponse('result': status)
+		return JsonResponse({'result': status})

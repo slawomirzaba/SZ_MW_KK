@@ -319,6 +319,33 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       slot.state = 'unknown';
     })
   }
+  $scope.checkState = function(pdu, slot){
+    $scope.busy = true;
+    $http({
+      url: "/pdu_communicator/check_state",
+      method: "GET",
+      params: {
+        pdu_ip: pdu.ip,
+        outlet_nr: slot.nr
+      }
+    }).success(function(data, status, headers, config){
+      if(data.result == true){
+        $scope.busy = false;
+        slot.state = 'active';
+        $.notify("Outlet is currently active", {position: "top center", className: "success"});
+      }
+      else
+      {
+        $scope.busy = false;
+        slot.state = 'disable';
+        $.notify("Outlet is currently active", {position: "top center", className: "success"});
+      }
+    }).error(function(data, status, headers, config){
+      $scope.busy = false;
+      $.notify("Check state failed", {position: "top center", className: "error"});
+      slot.state = 'unknown';
+    })
+  }
   $scope.displayAllGroups = function(){
     $scope.contentOfTab = $scope.templates[1];
 
@@ -331,5 +358,22 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       console.log("error");
     })
   }
+  $scope.confirmNumberOfPages = function(){
+    $('#pageNumberInput').blur();
+  }
 
 }]);
+
+pduApp.directive('myEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.myEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
