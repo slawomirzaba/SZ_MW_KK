@@ -47,7 +47,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
           arraySlots: {}
         }
         $scope.arrayPdu[data[i].id] = element;
-        $scope.groups[0].idPdus.push(data[i].id);
+        $scope.groups[0].idPdus.push(Number(data[i].id));
       }
     }).error(function(data, status, headers, config){
       console.log("error");
@@ -59,13 +59,13 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }).success(function(data, status, headers, config){
       for(var i = 0; i < data.length; ++i){
         var element = {
-          nr: i + 1,
+          nr: Number(i + 1),
           state: "unknown",
           descr: data[i].description,
-          pduId: data[i].pdu.id
+          pduId: Number(data[i].pdu.id)
         }
         $scope.arrayPdu[data[i].pdu.id].arraySlots[data[i].id] = element;
-        $scope.groups[0].idSlots.push(data[i].id);
+        $scope.groups[0].idSlots.push(Number(data[i].id));
         $scope.selectGroup(0);
         $scope.filteredPdus = $scope.selectedGroup.idPdus;
         $scope.pagination = {
