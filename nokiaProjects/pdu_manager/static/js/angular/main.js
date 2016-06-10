@@ -81,7 +81,8 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     })
   }
 
-  $scope.init = function(){
+  $scope.init = function(user){
+    $scope.username = user;
     $scope.loadAllDevices();
     $scope.contentOfTab = $scope.templates[0];
   }
@@ -135,10 +136,14 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         method: 'POST',
         url: '/api/group/add/',
         params: {
-          "username" : "mwojdyla",
+          "username" : $scope.username,
           "group_name" : $scope.newGroup.name
         },
-        data: JSON.stringify({'idpdus' :  [].concat($scope.newGroup.idPdus)})
+        data: JSON.stringify(
+          {
+            'idpdus' :  [].concat($scope.newGroup.idPdus),
+            'idslots' : [].concat($scope.newGroup.idSlots)
+          })
       }).success(function(data, status, headers, config){
           if(data.Succes == true)
           {
