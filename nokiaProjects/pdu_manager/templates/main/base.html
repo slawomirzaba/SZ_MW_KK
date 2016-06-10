@@ -19,7 +19,7 @@
   <script src = "{% static 'js/angular/main.js' %}"></script>
   <script src = "{% static 'js/angular/services/repository.js' %}"></script>
 </head>
-<body ng-app = "pduApp" ng-controller = "mainController" ng-init="init()">
+<body ng-app = "pduApp" ng-controller = "mainController" ng-init="init('{{ username }}')">
 
   <div id="wrapper">
 
