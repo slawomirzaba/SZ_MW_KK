@@ -19,7 +19,7 @@ def get_object_by_id(id):
     except  Type_pdu.DoesNotExist:
         return HttpResponse(status=404)
 
-class  Type_pdu_detail(View):
+class Type_pdu_detail(View):
 
     def get(self,request, id):
         obj = get_object_by_id(id)
