@@ -142,7 +142,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         data: JSON.stringify(
           {
             'idpdus' :  [].concat($scope.newGroup.idPdus),
-            'idslots' : [].concat($scope.newGroup.idSlots)
+            'idoutlets' : [].concat($scope.newGroup.idSlots)
           })
       }).success(function(data, status, headers, config){
           if(data.Succes == true)
