@@ -19,7 +19,7 @@ def get_object_by_id(id):
     except  Pdu.DoesNotExist:
         return HttpResponse(status=404)
 
-class  Pdu_detail(View):
+class Pdu_detail(View):
 
     def get(self,request, id):
         obj = get_object_by_id(id)

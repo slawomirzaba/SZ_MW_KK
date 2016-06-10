@@ -126,18 +126,20 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       for (var pduId in $scope.arrayPdu) {
         for(var slotId in $scope.arrayPdu[pduId].arraySlots){
           if($scope.newGroup.idSlots.indexOf(slotId) != -1){
-            $scope.newGroup.idPdus.push(pduId);
+            $scope.newGroup.idPdus.push(Number(pduId));
             break;
           }
         }
       }
       $http({
         method: 'POST',
-        url: '',
+        url: '/api/group/add/',
         params: {
-          
-        }
-      }).succes(function(data, status, headers, config){
+          "username" : "mwojdyla",
+          "group_name" : $scope.newGroup.name
+        },
+        data: $scope.newGroup.idPdus
+      }).success(function(data, status, headers, config){
           $scope.groups.push($scope.newGroup);
           for(var i = 0; i < $scope.groups.length; ++i){
             if($scope.groups[i].id == $scope.newGroup.id){
