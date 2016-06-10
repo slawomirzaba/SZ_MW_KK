@@ -12,7 +12,11 @@ class Create_Groups(View):
         group_name = request.GET.get("group_name")
         ids_pdu = request.body
         print ids_pdu
-        host = User.objects.get(user_name = username)
+        if User.objects.filter(user_name = username).exists():
+            host = User.objects.get(user_name = username)
+        else:
+            host = User.objects.create(user_name = username)
+            host.save()
         group = Group.objects.create(name = group_name ,owner = host)
         group.save()
 
