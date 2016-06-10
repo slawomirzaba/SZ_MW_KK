@@ -1,5 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
+import json
 
 from JSONResponse import JSONResponse
 
@@ -10,8 +11,8 @@ class Create_Groups(View):
     def post(self,request):
         username = request.GET.get("username")
         group_name = request.GET.get("group_name")
-        ids_pdu = request.body
-        print ids_pdu
+        data = json.loads(request.body)
+        ids_pdu = data.get("idpdus")
         if User.objects.filter(user_name = username).exists():
             host = User.objects.get(user_name = username)
         else:
@@ -21,6 +22,7 @@ class Create_Groups(View):
         group.save()
 
         for idpdu in ids_pdu:
+            print idpdu
             pdu = Pdu.objects.get(id = idpdu)
             group.pdus.add(pdu)
 

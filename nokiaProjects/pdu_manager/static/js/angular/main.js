@@ -138,20 +138,28 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
           "username" : "mwojdyla",
           "group_name" : $scope.newGroup.name
         },
-        data: $scope.newGroup.idPdus
+        data: JSON.stringify({'idpdus' :  [].concat($scope.newGroup.idPdus)})
       }).success(function(data, status, headers, config){
-          $scope.groups.push($scope.newGroup);
-          for(var i = 0; i < $scope.groups.length; ++i){
-            if($scope.groups[i].id == $scope.newGroup.id){
-              $scope.selectedGroup = $scope.groups[i];
-              break;
+          if(data.Succes == true)
+          {
+            $scope.groups.push($scope.newGroup);
+            for(var i = 0; i < $scope.groups.length; ++i){
+              if($scope.groups[i].id == $scope.newGroup.id){
+                $scope.selectedGroup = $scope.groups[i];
+                break;
+              }
             }
-          }
-          $('#menuGroups').addClass("active");
-          $('#secondLevelMenu').addClass('in');
-          $('.nav.nav-second-level.collapse').css('height', 'auto');
+            $('#menuGroups').addClass("active");
+            $('#secondLevelMenu').addClass('in');
+            $('.nav.nav-second-level.collapse').css('height', 'auto');
+            $.notify("Group has been created properly", {position: "top center", className: "success"});
+            }
+            else
+            {
+              $.notify("error", {position: "top center", className: "danger"});
+            }
         }).error(function(data, status, headers, config){
-          console.log("error");
+          $.notify("error", {position: "top center", className: "danger"});
       });
     }
     else if($scope.modeGroup == 'edit'){
