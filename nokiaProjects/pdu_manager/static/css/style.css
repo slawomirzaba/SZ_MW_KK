@@ -1,3 +1,6 @@
+body{
+	min-width: 620px;
+}
 .remove{
   float: right;
 }
