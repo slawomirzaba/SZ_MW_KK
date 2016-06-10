@@ -131,16 +131,26 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
           }
         }
       }
-      $scope.groups.push($scope.newGroup);
-      for(var i = 0; i < $scope.groups.length; ++i){
-        if($scope.groups[i].id == $scope.newGroup.id){
-          $scope.selectedGroup = $scope.groups[i];
-          break;
+      $http({
+        method: 'POST',
+        url: '',
+        params: {
+          
         }
-      }
-      $('#menuGroups').addClass("active");
-      $('#secondLevelMenu').addClass('in');
-      $('.nav.nav-second-level.collapse').css('height', 'auto');
+      }).succes(function(data, status, headers, config){
+          $scope.groups.push($scope.newGroup);
+          for(var i = 0; i < $scope.groups.length; ++i){
+            if($scope.groups[i].id == $scope.newGroup.id){
+              $scope.selectedGroup = $scope.groups[i];
+              break;
+            }
+          }
+          $('#menuGroups').addClass("active");
+          $('#secondLevelMenu').addClass('in');
+          $('.nav.nav-second-level.collapse').css('height', 'auto');
+        }).error(function(data, status, headers, config){
+          console.log("error");
+      });
     }
     else if($scope.modeGroup == 'edit'){
       $scope.newGroup.idPdus = [];
