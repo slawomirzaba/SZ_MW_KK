@@ -23,6 +23,7 @@ class Create_Groups(View):
                 host.save()
             group = Group.objects.create(name = group_name ,owner = host)
             group.save()
+            group.users.add(host)
 
             for idpdu in ids_pdu:
                 pdu = Pdu.objects.get(id = idpdu)
