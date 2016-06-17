@@ -81,9 +81,34 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     })
   }
 
+  $scope.loadUserGroups = function(){
+    $http({
+      url: "/api/group/get_user_groups/",
+      method: "GET",
+      params: {
+        username: $scope.username
+      }
+    }).success(function(data, status, headers, config){
+      var group = {};
+      for(var i = 0; i < data.result.length; ++i){
+        group = {
+          id: $scope.maxId() + 1,
+          name: data.result[i].group_name,
+          idPdus: data.result[i].pdus_in_group,
+          idSlots: data.result[i].outlets_in_group
+        }
+        $scope.groups.push(group);
+      }
+      console.log(data);
+    }).error(function(data, status, headers, config){
+      console.log("error");
+    });
+  }
+
   $scope.init = function(user){
     $scope.username = user;
     $scope.loadAllDevices();
+    $scope.loadUserGroups();
     $scope.contentOfTab = $scope.templates[0];
   }
   $scope.selectGroup = function(id){
