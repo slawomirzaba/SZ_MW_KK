@@ -70,7 +70,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         $scope.filteredPdus = $scope.selectedGroup.idPdus;
         $scope.pagination = {
           currentPage: 1,
-          entryLimit: 1,
+          entryLimit: 5,
           noOfPages: 0,
           limitPages: 5
         };
@@ -285,6 +285,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.selectedLabel = 1;
     $scope.modeGroup = "edit";
     $scope.newGroup = angular.copy(group);
+    $scope.newGroup.idSlots = $scope.newGroup.idSlots.map(function(e){return e.toString()});
   }
   $scope.switchOnSlot = function(pdu, slot){
     $scope.busy = true;
