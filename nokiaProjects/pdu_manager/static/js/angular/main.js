@@ -223,13 +223,13 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     return max;
   }
   $scope.removeGroup = function(id){
-    for(var i = $scope.groups.length - 1; i >= 0; i--) {
+    /*for(var i = $scope.groups.length - 1; i >= 0; i--) {
       if($scope.groups[i].id === id) {
         $scope.groups.splice(i, 1);
         break;
       }
     }
-    $scope.selectedGroup = $scope.groups[0];
+    $scope.selectedGroup = $scope.groups[0];*/
   }
 
   $scope.getNumberPages = function() {
@@ -411,6 +411,23 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
   }
   $scope.confirmNumberOfPages = function(){
     $('#pageNumberInput').blur();
+  }
+  $scope.addGroupToUser = function(group){
+    var element = {
+      id: group.id,
+      name: group.name,
+      idPdus: group.pdus,
+      idSlots: group.outlets
+    }
+    $scope.groups.push(element);
+  }
+  $scope.validGroup = function(){
+    if($scope.newGroup == undefined)
+      return false;
+    if($scope.newGroup.name.length > 5 && $scope.newGroup.idSlots.length > 0)
+      return true;
+    else
+      return false;
   }
 
 }]);
