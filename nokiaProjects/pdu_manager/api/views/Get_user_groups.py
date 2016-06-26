@@ -13,6 +13,7 @@ from api.models import *
 class Group_detail(object):
 
     def __init__(self):
+        self.group_id = 0
         self.group_name = ""
         self.pdus_in_group = []
         self.outlets_in_group = []
@@ -24,9 +25,11 @@ class Group_detail(object):
         self.outlets_in_group.append(y)
 
 class Group_detailSerializer(serializers.Serializer):
+    group_id = serializers.IntegerField()
     group_name = serializers.CharField(max_length = 45)
     pdus_in_group = serializers.ListField()
     outlets_in_group = serializers.ListField()
+
 
 class Get_user_groups(View):
     def get(self,request):
@@ -44,6 +47,7 @@ class Get_user_groups(View):
             for every_group in user_groups:
                 single_group = Group_detail()
                 single_group.group_name = every_group.name
+                single_group.group_id = every_group.id
                 for every_pdu in every_group.pdus.all():
                     single_group.appendpdu(every_pdu.id)
                 for every_outlet in every_group.outlets.all():
@@ -54,4 +58,5 @@ class Get_user_groups(View):
 
             return JSONResponse({'result' : result})
         else:
-            print "Nie dziala pobieranie grup gdzie nalezy uzytkownik"
+            result = []
+            return JSONResponse({'result' : result})
