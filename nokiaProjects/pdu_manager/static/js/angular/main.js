@@ -92,7 +92,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       var group = {};
       for(var i = 0; i < data.result.length; ++i){
         group = {
-          id: $scope.maxId() + 1,
+          id: data.result[i].group_id,
           name: data.result[i].group_name,
           idPdus: data.result[i].pdus_in_group,
           idSlots: data.result[i].outlets_in_group
