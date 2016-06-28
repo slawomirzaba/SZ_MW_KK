@@ -139,7 +139,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
   $scope.createEmptyGroup = function(){
     $scope.modeGroup = "add";
     $scope.newGroup = {
-      id: $scope.maxId() + 1,
+      id: -1,
       name: "",
       idPdus: [],
       idSlots: []
@@ -172,6 +172,8 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       }).success(function(data, status, headers, config){
           if(data.Succes == true)
           {
+            $scope.newGroup.id = data.group_id;
+            console.log(data.group_id);
             $scope.groups.push($scope.newGroup);
             for(var i = 0; i < $scope.groups.length; ++i){
               if($scope.groups[i].id == $scope.newGroup.id){
@@ -211,16 +213,6 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       if($scope.groups[i].id == $scope.selectedGroup.id)
         $scope.selectedGroup = $scope.groups[i];
     }
-  }
-
-  $scope.maxId = function(){
-    var max = -1;
-    for(var i = 0; i < $scope.groups.length; i++){
-      if($scope.groups[i].id > max){
-        max = $scope.groups[i].id;
-      }
-    }
-    return max;
   }
   $scope.removeGroup = function(id){
     /*for(var i = $scope.groups.length - 1; i >= 0; i--) {
@@ -413,12 +405,32 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $('#pageNumberInput').blur();
   }
   $scope.addGroupToUser = function(group){
+    try{
+      $scope.groups.forEach(function(currentValue,index){
+      if(currentValue.id == group.id)
+        throw "exit";
+      });
+    } catch(e){
+      if(e == "exit")
+        $.notify("you are already a member of this group", {position: "top center", className: "warn"});
+        return;
+    }
+    var tmpPdus = [];
+    var tmpOutlets = [];
+    group.pdus.forEach(function(currentValue,index){
+        tmpPdus.push(currentValue.id);
+    })
+    group.outlets.forEach(function(currentValue,index){
+        tmpOutlets.push(currentValue.id);
+    })
     var element = {
       id: group.id,
       name: group.name,
-      idPdus: group.pdus,
-      idSlots: group.outlets
+      idPdus: tmpPdus,
+      idSlots: tmpOutlets
     }
+    console.log($scope.groups[0]);
+    console.log(element);
     $scope.groups.push(element);
   }
   $scope.validGroup = function(){
