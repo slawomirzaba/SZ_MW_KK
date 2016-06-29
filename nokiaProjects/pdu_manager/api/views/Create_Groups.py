@@ -34,7 +34,7 @@ class Create_Groups(View):
                 group.outlets.add(outlett)
 
             if Group.objects.filter(owner = host, name = group_name).exists():
-                return JSONResponse({'Succes' : True})
+                return JSONResponse({'Succes' : True, 'group_id' : group.id})
             else:
                 return JSONResponse({'Succes' : False})
         else:
