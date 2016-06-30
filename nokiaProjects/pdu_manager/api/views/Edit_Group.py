@@ -18,7 +18,7 @@ class Edit_Group(View):
             group = Group.objects.get(id = group_id)
             if group.name != group_name:
                 group.name = group_name
-            for old_pdu in group.pdus: ##Removing pdus which are removed
+            for old_pdu in group.pdus.all(): ##Removing pdus which are removed
                 check = False
                 for new_id_pdu in ids_pdu:
                     if old_pdu.id == new_id_pdu:
@@ -27,7 +27,7 @@ class Edit_Group(View):
                     group.pdus.remove(old_pdu)
             for new_id_pdu in ids_pdu:    ## Add new pdus
                 check = False
-                for old_pdu in group.pdus:
+                for old_pdu in group.pdus.all():
                     if old_pdu.id == new_id_pdu:
                         check = True
                 if check == False:
@@ -35,7 +35,7 @@ class Edit_Group(View):
                         pdu = Pdu.objects.get(id = new_id_pdu)
                         group.pdus.add(pdu)
 
-            for old_outlet in group.outlets: ##Removing pdus which are removed
+            for old_outlet in group.outlets.all(): ##Removing pdus which are removed
                 check = False
                 for new_id_outlet in ids_outl:
                     if old_outlet.id == new_id_outlet:
@@ -44,7 +44,7 @@ class Edit_Group(View):
                     group.outlets.remove(old_outlet)
             for new_id_outlet in ids_outl:    ## Add new pdus
                 check = False
-                for old_outlet in group.outlets:
+                for old_outlet in group.outlets.all():
                     if old_outlet.id == new_id_outlet:
                         check = True
                 if check == False:

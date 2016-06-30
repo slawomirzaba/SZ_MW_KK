@@ -16,6 +16,8 @@ from api.views.User_action_detail import User_action_detail
 from api.views.Group_detail import Group_detail
 from api.views.Create_Groups import Create_Groups
 from api.views.Get_user_groups import Get_user_groups
+from api.views.Edit_user_in_group import Edit_user_in_group
+from api.views.Edit_Group import Edit_Group
 
 urlpatterns = [
     url(r'^users/$', Listing_User.as_view(), name = 'users'),
@@ -34,4 +36,6 @@ urlpatterns = [
     url(r'^user_action/(?P<id>[0-9]+)/$',  User_action_detail.as_view(), name = 'User_action_detail'),
     url(r'^group/add/$',  Create_Groups.as_view(), name = 'Create_Groups'),
     url(r'^group/get_user_groups/$',  Get_user_groups.as_view(), name = 'Get_user_groups'),
+    url(r'^group/edit_user_in_group/$',  Edit_user_in_group.as_view(), name = 'edit_user_in_group'),
+    url(r'^group/edit_group/$',  Edit_Group.as_view(), name = 'edit_group'),
 ]

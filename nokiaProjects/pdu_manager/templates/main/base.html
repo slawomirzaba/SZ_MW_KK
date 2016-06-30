@@ -71,7 +71,7 @@
                           <ul class="nav nav-second-level" id="secondLevelMenu">
                               <li ng-repeat="group in groups" ng-class= "{'selectedGroup': selectedGroup.id == group.id}">
                                   <a ng-show="group.name != 'all' && group.id != 0" href="#" ng-click="selectGroup(group.id)">{[{group.name}]}
-                                    <i ng-click="removeGroup(group.id)" class="fa fa-trash remove" style="margin-left:10px"></i>
+                                    <i ng-click="removeGroup(group)" class="fa fa-trash remove" style="margin-left:10px"></i>
                                     <i ng-click = "editGroup(group)" data-toggle="modal" data-target="#addingGroup" class="fa fa-pencil" aria-hidden="true"></i>
                                   </a>
                               </li>

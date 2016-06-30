@@ -89,6 +89,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         username: $scope.username
       }
     }).success(function(data, status, headers, config){
+      $scope.groups.splice(1, $scope.groups.length - 1);
       var group = {};
       for(var i = 0; i < data.result.length; ++i){
         group = {
@@ -204,24 +205,66 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
           }
         }
       }
-      for(var i = 0; i < $scope.groups.length; i++){
-        if($scope.groups[i].id == $scope.newGroup.id){
-          $scope.groups[i] = angular.copy($scope.newGroup);
-          break;
-        }
-      }
-      if($scope.groups[i].id == $scope.selectedGroup.id)
-        $scope.selectedGroup = $scope.groups[i];
+      $http({
+        method: 'POST',
+        url: '/api/group/edit_group/',
+        params: {
+          "username" : $scope.username,
+          "group_name" : $scope.newGroup.name,
+          "group_id" : $scope.newGroup.id
+        },
+        data: JSON.stringify(
+          {
+            'idpdus' :  [].concat($scope.newGroup.idPdus),
+            'idoutlets' : [].concat($scope.newGroup.idSlots)
+          })
+      }).success(function(data, status, headers, config){
+          if(data.Succes == true)
+          {
+            for(var i = 0; i < $scope.groups.length; i++){
+              if($scope.groups[i].id == $scope.newGroup.id){
+                $scope.groups[i] = angular.copy($scope.newGroup);
+                break;
+              }
+            }
+            if($scope.groups[i].id == $scope.selectedGroup.id)
+              $scope.selectedGroup = $scope.groups[i];
+            $('#menuGroups').addClass("active");
+            $('#secondLevelMenu').addClass('in');
+            $('.nav.nav-second-level.collapse').css('height', 'auto');
+            $.notify("Group has been edited properly", {position: "top center", className: "success"});
+          }
+          else
+          {
+            $.notify("error", {position: "top center", className: "danger"});
+          }
+        }).error(function(data, status, headers, config){
+          $.notify("error", {position: "top center", className: "danger"});
+      });
     }
   }
-  $scope.removeGroup = function(id){
-    /*for(var i = $scope.groups.length - 1; i >= 0; i--) {
-      if($scope.groups[i].id === id) {
-        $scope.groups.splice(i, 1);
-        break;
+  $scope.removeGroup = function(group){
+    $http({
+      url: "/api/group/edit_user_in_group/",
+      params: {
+        "username" : $scope.username,
+        "group_name" : group.name
+      },
+      method: "DELETE",
+    }).success(function(data, status, headers, config){
+      if(data.Succes == true){
+        $scope.groups = $scope.groups.filter(function( obj ) {
+          return obj.id !== group.id;
+        });
+        $.notify("Group has been removed", {position: "top center", className: "success"});
+        $scope.selectedGroup = $scope.groups[0];
       }
-    }
-    $scope.selectedGroup = $scope.groups[0];*/
+      else{
+        $.notify("Unfortunately error occurred", {position: "top center", className: "error"});
+      }
+    }).error(function(data, status, headers, config){
+      $.notify("Unfortunately error occurred", {position: "top center", className: "error"});
+    });
   }
 
   $scope.getNumberPages = function() {
@@ -415,24 +458,26 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         $.notify("you are already a member of this group", {position: "top center", className: "warn"});
         return;
     }
-    var tmpPdus = [];
-    var tmpOutlets = [];
-    group.pdus.forEach(function(currentValue,index){
-        tmpPdus.push(currentValue.id);
-    })
-    group.outlets.forEach(function(currentValue,index){
-        tmpOutlets.push(currentValue.id);
-    })
-    var element = {
-      id: group.id,
-      name: group.name,
-      idPdus: tmpPdus,
-      idSlots: tmpOutlets
-    }
-    console.log($scope.groups[0]);
-    console.log(element);
-    $scope.groups.push(element);
+    $http({
+      url: "/api/group/edit_user_in_group/",
+      params: {
+        "username" : $scope.username,
+        "group_name" : group.name
+      },
+      method: "POST",
+    }).success(function(data, status, headers, config){
+      if(data.Succes == true){
+        $scope.loadUserGroups();
+        $.notify("Group has been added", {position: "top center", className: "success"});
+      }
+      else{
+        $.notify("Unfortunately error occurred", {position: "top center", className: "error"});
+      }
+    }).error(function(data, status, headers, config){
+      $.notify("Unfortunately error occurred", {position: "top center", className: "error"});
+    });
   }
+
   $scope.validGroup = function(){
     if($scope.newGroup == undefined)
       return false;
