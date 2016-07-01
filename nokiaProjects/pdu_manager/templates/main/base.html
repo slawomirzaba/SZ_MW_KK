@@ -71,7 +71,7 @@
                           <ul class="nav nav-second-level" id="secondLevelMenu">
                               <li ng-repeat="group in groups" ng-class= "{'selectedGroup': selectedGroup.id == group.id}">
                                   <a ng-show="group.name != 'all' && group.id != 0" href="#" ng-click="selectGroup(group.id)">{[{group.name}]}
-                                    <i ng-click="removeGroup(group)" class="fa fa-trash remove" style="margin-left:10px"></i>
+                                    <i ng-click="designateGroupToRemove(group)" data-toggle="modal" data-target="#removeGroup" class="fa fa-trash remove" style="margin-left:10px"></i>
                                     <i ng-click = "editGroup(group)" data-toggle="modal" data-target="#addingGroup" class="fa fa-pencil" aria-hidden="true"></i>
                                   </a>
                               </li>
@@ -130,6 +130,28 @@
 
     </div>
   </div>
+
+
+  <div class="modal fade removeGroup" id="removeGroup" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Remove group</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure, that you want to remove group: {[{groupPrepareToRemove.name}]}?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="removeGroup()">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="busy" ng-show="busy == true">
     <center>
       <img style="position: fixed;top: 50%;" src="../../static/images/ajax-loader.gif">

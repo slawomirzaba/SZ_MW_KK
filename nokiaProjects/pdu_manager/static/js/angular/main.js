@@ -172,7 +172,6 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
           if(data.Succes == true)
           {
             $scope.newGroup.id = data.group_id;
-            console.log(data.group_id);
             $scope.groups.push($scope.newGroup);
             for(var i = 0; i < $scope.groups.length; ++i){
               if($scope.groups[i].id == $scope.newGroup.id){
@@ -238,19 +237,22 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       });
     }
   }
-  $scope.removeGroup = function(group){
+  $scope.designateGroupToRemove = function(group){
+    $scope.groupPrepareToRemove = group;
+  }
+  $scope.removeGroup = function(){
     $http({
       url: "/api/group/edit_user_in_group/",
       data: JSON.stringify(
         {
           "username" : $scope.username,
-          "group_name" : group.name
+          "group_name" : $scope.groupPrepareToRemove.name
         }),
       method: "DELETE"
     }).success(function(data, status, headers, config){
       if(data.Succes == true){
         $scope.groups = $scope.groups.filter(function( obj ) {
-          return obj.id !== group.id;
+          return obj.id !== $scope.groupPrepareToRemove.id;
         });
         $.notify("Group has been removed", {position: "top center", className: "success"});
         $scope.selectedGroup = $scope.groups[0];
