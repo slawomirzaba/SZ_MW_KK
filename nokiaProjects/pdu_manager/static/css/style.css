@@ -129,3 +129,7 @@ button{
 	background-color: rgba(220,220,220, 0.4);
 	z-index:200000;
 }
+.scroll-body-modal{
+	max-height: 300px;
+  overflow: auto;
+}
