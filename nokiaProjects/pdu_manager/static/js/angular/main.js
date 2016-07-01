@@ -161,12 +161,10 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       $http({
         method: 'POST',
         url: '/api/group/add/',
-        params: {
-          "username" : $scope.username,
-          "group_name" : $scope.newGroup.name
-        },
         data: JSON.stringify(
           {
+            "username" : $scope.username,
+            "group_name" : $scope.newGroup.name,
             'idpdus' :  [].concat($scope.newGroup.idPdus),
             'idoutlets' : [].concat($scope.newGroup.idSlots)
           })
@@ -208,13 +206,10 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       $http({
         method: 'POST',
         url: '/api/group/edit_group/',
-        params: {
-          "username" : $scope.username,
-          "group_name" : $scope.newGroup.name,
-          "group_id" : $scope.newGroup.id
-        },
         data: JSON.stringify(
           {
+            "group_name" : $scope.newGroup.name,
+            "group_id" : $scope.newGroup.id,
             'idpdus' :  [].concat($scope.newGroup.idPdus),
             'idoutlets' : [].concat($scope.newGroup.idSlots)
           })
@@ -246,11 +241,12 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
   $scope.removeGroup = function(group){
     $http({
       url: "/api/group/edit_user_in_group/",
-      params: {
-        "username" : $scope.username,
-        "group_name" : group.name
-      },
-      method: "DELETE",
+      data: JSON.stringify(
+        {
+          "username" : $scope.username,
+          "group_name" : group.name
+        }),
+      method: "DELETE"
     }).success(function(data, status, headers, config){
       if(data.Succes == true){
         $scope.groups = $scope.groups.filter(function( obj ) {
@@ -460,10 +456,10 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }
     $http({
       url: "/api/group/edit_user_in_group/",
-      params: {
+      data: JSON.stringify({
         "username" : $scope.username,
         "group_name" : group.name
-      },
+      }),
       method: "POST",
     }).success(function(data, status, headers, config){
       if(data.Succes == true){

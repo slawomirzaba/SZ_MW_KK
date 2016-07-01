@@ -9,9 +9,9 @@ from api.models import *
 class Create_Groups(View):
 
     def post(self,request):
-        username = request.GET.get("username")
-        group_name = request.GET.get("group_name")
         data = json.loads(request.body)
+        username = data.get("username")
+        group_name = data.get("group_name")
         ids_pdu = data.get("idpdus")
         outl = data.get("idoutlets")
 

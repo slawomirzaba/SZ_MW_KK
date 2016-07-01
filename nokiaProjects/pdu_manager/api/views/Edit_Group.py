@@ -9,9 +9,9 @@ from api.models import *
 class Edit_Group(View):
 
     def post(self,request):
-        group_id = request.GET.get("group_id")
-        group_name = request.GET.get("group_name")
         data = json.loads(request.body)
+        group_id = data.get("group_id")
+        group_name = data.get("group_name")
         ids_pdu = data.get("idpdus")
         ids_outl = data.get("idoutlets")
         if Group.objects.filter(id = group_id).exists():
@@ -51,6 +51,7 @@ class Edit_Group(View):
                     if Outlet.objects.filter(id = new_id_outlet).exists():
                         outlet = Outlet.objects.get(id = new_id_outlet)
                         group.outlets.add(outlet)
+            group.save();
             return JSONResponse({'Succes' : True})
         else:
             return JSONResponse({'Succes' : False})

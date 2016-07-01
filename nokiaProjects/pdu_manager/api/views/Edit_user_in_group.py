@@ -9,8 +9,9 @@ from api.models import *
 class Edit_user_in_group(View):
 
     def post(self,request):
-        username = request.GET.get("username")
-        group_name = request.GET.get("group_name")
+        data = json.loads(request.body)
+        username = data.get("username")
+        group_name = data.get("group_name")
 
         if Group.objects.filter(name = group_name).exists():
             group = Group.objects.get(name = group_name)
@@ -30,8 +31,9 @@ class Edit_user_in_group(View):
             return JSONResponse({'Succes' : False})
 
     def delete(self, request):
-        username = request.GET.get("username")
-        group_name = request.GET.get("group_name")
+        data = json.loads(request.body)
+        username = data.get("username")
+        group_name = data.get("group_name")
         if Group.objects.filter(name = group_name).exists():
             group = Group.objects.get(name = group_name)
             if User.objects.filter(user_name = username).exists():
