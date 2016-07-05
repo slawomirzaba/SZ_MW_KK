@@ -19,6 +19,7 @@ from api.views.Get_user_groups import Get_user_groups
 from api.views.Edit_user_in_group import Edit_user_in_group
 from api.views.Edit_Group import Edit_Group
 from api.views.Edit_Pdu_Description import Edit_Pdu_Description
+from api.views.Edit_Outlet_Description import Edit_Outlet_Description
 
 urlpatterns = [
     url(r'^users/$', Listing_User.as_view(), name = 'users'),
@@ -34,6 +35,7 @@ urlpatterns = [
     url(r'^pdu/edit_pdu_description/$',  Edit_Pdu_Description.as_view(), name = 'edit_pdu_description'),
     url(r'^group/(?P<id>[0-9]+)/$',  Group_detail.as_view(), name = 'Group_detail'),
     url(r'^outlet/(?P<id>[0-9]+)/$',  Outlet_detail.as_view(), name = 'Outlet_detail'),
+    url(r'^outlet/edit_outlet_description/$',  Edit_Outlet_Description.as_view(), name = 'edit_outlet_description'),
     url(r'^type_user_action/(?P<id>[0-9]+)/$',  Type_user_action_detail.as_view(), name = 'Type_user_action_detail'),
     url(r'^user_action/(?P<id>[0-9]+)/$',  User_action_detail.as_view(), name = 'User_action_detail'),
     url(r'^group/add/$',  Create_Groups.as_view(), name = 'Create_Groups'),
