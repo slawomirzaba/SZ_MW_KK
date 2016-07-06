@@ -23,7 +23,7 @@
               <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
             </td>
             <td ng-if="editedPdu == pduId">
-              <span>confirm</span><i ng-click="confirmDescr(arrayPdu[pduId])" class="fa fa-check" aria-hidden="true"></i>
+              <span>confirm</span><i ng-click="confirmPduDescr(arrayPdu[pduId])" class="fa fa-check" aria-hidden="true"></i>
             </td>
             <td ng-if="editedPdu == pduId">
               reject<i ng-click="rejectDescr()" class="fa fa-ban" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
               <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
             </td>
             <td ng-if="editedslot == slotId">
-              <span>confirm</span><i ng-click="confirmSlot(arrayPdu[pduId].arraySlots[slotId])" class="fa fa-check" aria-hidden="true"></i>
+              <span>confirm</span><i ng-click="confirmSlotDescr(arrayPdu[pduId].arraySlots[slotId])" class="fa fa-check" aria-hidden="true"></i>
             </td>
             <td ng-if="editedslot == slotId">
               reject<i ng-click="rejectSlotDescr()" class="fa fa-ban" aria-hidden="true"></i>

@@ -100,7 +100,6 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
         }
         $scope.groups.push(group);
       }
-      console.log(data);
     }).error(function(data, status, headers, config){
       console.log("error");
     });
@@ -293,9 +292,31 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.descr.editedPduDescrText = angular.copy(pdu.descr);
     $scope.editedPdu = pduId;
   }
-  $scope.confirmDescr = function(pdu){
-    $scope.editedPdu = undefined;
-    pdu.descr = $scope.descr.editedPduDescrText
+  $scope.confirmPduDescr = function(pdu){
+    if(pdu.descr == $scope.descr.editedPduDescrText){
+      $.notify("Pdu description has been updated", {position: "top center", className: "success"});
+      $scope.editedPdu = undefined;
+    }else{
+      $http({
+        url: "/api/pdu/edit_pdu_description/",
+        method: "POST",
+        data: {
+          "pdu_id" : $scope.editedPdu,
+          "pdu_description" : $scope.descr.editedPduDescrText
+        }
+      }).success(function(data, status, headers, config){
+        if(data.Succes = true){
+          $.notify("Pdu description has been updated", {position: "top center", className: "success"});
+          pdu.descr = $scope.descr.editedPduDescrText;
+        }else{
+          $.notify("error", {position: "top center", className: "error"});
+        }
+        $scope.editedPdu = undefined;
+      }).error(function(data, status, headers, config){
+        $.notify("error", {position: "top center", className: "error"});
+        $scope.editedPdu = undefined;
+      });
+    }
   }
   $scope.rejectDescr = function(){
     $scope.editedPdu = undefined;
@@ -309,10 +330,34 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     $scope.editedslot = undefined;
     $scope.editedSlotFromPdu = undefined;
   }
-  $scope.confirmSlot = function(slot){
-    $scope.editedslot = undefined;
-    $scope.editedSlotFromPdu = undefined;
-    slot.descr = $scope.descr.editedSlotDescrText;
+  $scope.confirmSlotDescr = function(slot){
+    if(slot.descr == $scope.descr.editedSlotDescrText){
+      $.notify("Outlet description has been updated", {position: "top center", className: "success"});
+      $scope.editedslot = undefined;
+      $scope.editedSlotFromPdu = undefined;
+    }else{
+      $http({
+        url: "/api/outlet/edit_outlet_description/",
+        method: "POST",
+        data: {
+          "outlet_id" : $scope.editedslot,
+          "outlet_description" : $scope.descr.editedSlotDescrText
+        }
+      }).success(function(data, status, headers, config){
+        if(data.Succes = true){
+          $.notify("Outlet description has been updated", {position: "top center", className: "success"});
+          slot.descr = $scope.descr.editedSlotDescrText;
+        }else{
+          $.notify("error", {position: "top center", className: "error"});
+        }
+        $scope.editedslot = undefined;
+        $scope.editedSlotFromPdu = undefined;
+      }).error(function(data, status, headers, config){
+        $.notify("error", {position: "top center", className: "error"});
+        $scope.editedslot = undefined;
+        $scope.editedSlotFromPdu = undefined;
+      });
+    }
   }
   $scope.editGroup = function(group){
     $scope.selectedLabel = 1;
