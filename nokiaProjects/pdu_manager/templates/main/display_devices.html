@@ -22,11 +22,11 @@
             <td ng-if="editedPdu == pduId">
               <textarea ng-model = "descr.editedPduDescrText" class = "pduDesc"></textarea>
             </td>
-            <td ng-if="editedPdu == pduId">
-              <span>confirm</span><i ng-click="confirmPduDescr(arrayPdu[pduId])" class="fa fa-check" aria-hidden="true"></i>
+            <td ng-if="editedPdu == pduId" ng-click="confirmPduDescr(arrayPdu[pduId])">
+              <span>confirm</span><i class="fa fa-check" aria-hidden="true"></i>
             </td>
-            <td ng-if="editedPdu == pduId">
-              reject<i ng-click="rejectDescr()" class="fa fa-ban" aria-hidden="true"></i>
+            <td ng-if="editedPdu == pduId" ng-click="rejectDescr()">
+              reject<i class="fa fa-ban" aria-hidden="true"></i>
             </td>
           </tr>
           <tr ng-show="arrayPdu[pduId].dispMoreInfo && arrayPdu[pduId].arraySlots[slotId] != undefined" ng-repeat-start = "slotId in selectedGroup.idSlots | orderBy: slotId" style="background-color: #D2E7FC;">
@@ -61,11 +61,11 @@
             <td ng-if="editedslot == slotId">
               <textarea ng-model = "descr.editedSlotDescrText" class = "slotDesc"></textarea>
             </td>
-            <td ng-if="editedslot == slotId">
-              <span>confirm</span><i ng-click="confirmSlotDescr(arrayPdu[pduId].arraySlots[slotId])" class="fa fa-check" aria-hidden="true"></i>
+            <td ng-if="editedslot == slotId" ng-click="confirmSlotDescr(arrayPdu[pduId].arraySlots[slotId])">
+              <span>confirm</span><i class="fa fa-check" aria-hidden="true"></i>
             </td>
-            <td ng-if="editedslot == slotId">
-              reject<i ng-click="rejectSlotDescr()" class="fa fa-ban" aria-hidden="true"></i>
+            <td ng-if="editedslot == slotId" ng-click="rejectSlotDescr()" >
+              reject<i class="fa fa-ban" aria-hidden="true"></i>
             </td>
           </tr>
         </tbody>
