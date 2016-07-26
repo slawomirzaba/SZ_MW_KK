@@ -1,1 +1,25 @@
-README
+#moduly potrzebne do dzialania aplikacji:
+
+django:
+    - pip install django
+ldap:
+    - pip install python-ldap
+    - sudo apt-get install python-dev libldap2-dev libsasl2-dev libssl-dev
+    - pip install django-auth-ldap
+rest:
+    - sudo pip install djangorestframework
+mysql:
+    - pip install MySQL-python
+snmp:
+    - pip install pysnmp
+
+# zakladanie bazy:
+
+1) instalacja mysql
+2) odpalamy terminal i wpisujemy: sudo mysql -p
+3) tworzymy uzytkownika: create user 'PDU_ROOT'@'localhost';
+4) ustawiamy dla niego haslo: SET PASSWORD FOR 'PDU_ROOT'@'localhost' = PASSWORD('qwerty');
+5) tworzymy baze danych: create database base_for_pdu_application;
+6) nadajemy użytkownikowi prawa do bazy danych ( w tym przypadku wszystkie): GRANT ALL PRIVILEGES ON * . * TO 'PDU_ROOT'@'localhost';
+7) wchodzisz do projektu, robisz makemigrations i migrate
+8) zaczytujesz przykladowe dane: python manage.py loaddata dump.json
