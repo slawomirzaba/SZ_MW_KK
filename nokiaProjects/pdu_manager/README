@@ -7,7 +7,7 @@ ldap:
     - sudo apt-get install python-dev libldap2-dev libsasl2-dev libssl-dev
     - pip install django-auth-ldap
 rest:
-    - sudo pip install djangorestframework
+    - pip install djangorestframework
 mysql:
     - pip install MySQL-python
 snmp:
