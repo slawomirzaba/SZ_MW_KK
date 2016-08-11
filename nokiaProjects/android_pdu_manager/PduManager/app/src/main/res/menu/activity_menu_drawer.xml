@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_devices"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="Devices" />
+        <item
+            android:id="@+id/nav_my_groups"
+            android:icon="@android:drawable/btn_star_big_on"
+            android:title="My groups" />
+        <item
+            android:id="@+id/nav_public_groups"
+            android:icon="@android:drawable/ic_search_category_default"
+            android:title="Public groups" />
+    </group>
+
+    <item android:title="Profil">
+        <menu>
+            <item
+                android:id="@+id/nav_email"
+                android:icon="@android:drawable/ic_dialog_email"
+                android:title="sss@sss.pl" />
+            <item
+                android:id="@+id/nav_log_out"
+                android:icon="@android:drawable/ic_menu_directions"
+                android:title="Log out" />
+        </menu>
+    </item>
+
+</menu>
