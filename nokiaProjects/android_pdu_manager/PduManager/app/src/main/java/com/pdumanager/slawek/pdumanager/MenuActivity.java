@@ -19,7 +19,6 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        FragmentManager fragmentManager = getFragmentManager();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -33,7 +32,9 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new DevicesActivity()).commit();
+        MenuItem itemDevices = navigationView.getMenu().getItem(0);
+        itemDevices.setChecked(true);
+        onNavigationItemSelected(itemDevices);
     }
 
     @Override

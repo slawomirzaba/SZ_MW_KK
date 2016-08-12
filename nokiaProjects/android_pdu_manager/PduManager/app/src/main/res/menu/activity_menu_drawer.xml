@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_devices"
             android:icon="@android:drawable/ic_menu_view"
-            android:title="Devices" />
+            android:title="@string/nav_devices" />
         <item
             android:id="@+id/nav_my_groups"
             android:icon="@android:drawable/btn_star_big_on"
-            android:title="My groups" />
+            android:title="@string/nav_my_groups" />
         <item
             android:id="@+id/nav_public_groups"
             android:icon="@android:drawable/ic_search_category_default"
-            android:title="Public groups" />
+            android:title="@string/nav_public_groups" />
     </group>
 
     <item android:title="Profil">
@@ -25,7 +25,7 @@
             <item
                 android:id="@+id/nav_log_out"
                 android:icon="@android:drawable/ic_menu_directions"
-                android:title="Log out" />
+                android:title="@string/nav_log_out" />
         </menu>
     </item>
 
