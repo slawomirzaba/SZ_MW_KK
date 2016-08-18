@@ -1,0 +1,53 @@
+{
+  "devices" :
+          [
+            {
+              "id" : 1,
+              "name" : "pdu1",
+              "ip" : "192.168.1.1",
+              "descr" : "aaaa bbbb",
+              "outlets" :
+                      [
+                        {
+                          "id" : 1,
+                          "number" : 1,
+                          "description" : "ssss1"
+                        },
+                        {
+                          "id" : 2,
+                          "number" : 2,
+                          "description" : "ssss2"
+                        },
+                        {
+                          "id" : 3,
+                          "number" : 3,
+                          "description" : "ssss3"
+                        }
+                      ]
+            },
+            {
+              "id" : 2,
+              "name" : "pdu2",
+              "ip" : "192.168.1.2",
+              "descr" : "aaaa bbbb2",
+              "outlets" :
+              [
+                {
+                  "id" : 4,
+                  "number" : 1,
+                  "description" : "zzz1"
+                },
+                {
+                  "id" : 5,
+                  "number" : 2,
+                  "description" : "zzz2"
+                },
+                {
+                  "id" : 6,
+                  "number" : 3,
+                  "description" : "zzz3"
+                }
+              ]
+            }
+          ]
+}

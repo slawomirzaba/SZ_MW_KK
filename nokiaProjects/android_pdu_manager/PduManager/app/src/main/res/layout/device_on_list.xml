@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/device_on_list">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/device_ip"
+            android:text="Ip: 192.168.90.1"
+            android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:id="@+id/device_name"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Name: Pierwsze pdu"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/device_description"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Description: aaaaa aaaaa aaaaa aaaaaaa aaaaa aaaaa aaaaa aaaaaaa aaaaa aaaaa aaaaa aaaa a a a aaaaaa aaaa aaaa aaaa aaaaaa aaaa aaa aaaa aaaaa aaa aaaaaaaaaa"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+</LinearLayout>
