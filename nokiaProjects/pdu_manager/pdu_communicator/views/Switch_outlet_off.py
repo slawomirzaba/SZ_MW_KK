@@ -1,6 +1,10 @@
+from django.utils import timezone
 from django.views.generic import View
 from django.http import JsonResponse
 from pdu_communicator.pdu.aten import ATEN
+from main.models import User, User_action, Pdu, Outlet, Type_user_action
+
+import datetime
 
 
 class Switch_outlet_off(View):
@@ -15,6 +19,15 @@ class Switch_outlet_off(View):
         status = aten.get_outlet_status(outlet_nr)
         if status == 'on':
             aten.set_outlet_value(outlet_nr, 'off')
+            
+            user = User.objects.get(user_name=request.user.username)
+            time = timezone.now()
+            #time = datetime.datetime.now()
+            pdu_object = Pdu.objects.get(ip=pdu_ip)
+            outlet_object = Outlet.objects.get(pdu=pdu_object, number=outlet_nr)
+            type_object = Type_user_action.objects.get(type="off")
+            User_action.objects.create(time=time, user=user, outlet=outlet_object, type=type_object)
+            
             #text = "PDU IP {0}: Outlet {1} has been correctly switched off".format(pdu_ip, outlet_nr)
             return JsonResponse({'result': True})
         #text = "PDU IP {0}: Outlet {1} is currently switched off".format(pdu_ip, outlet_nr)

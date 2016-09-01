@@ -28,9 +28,17 @@ class PDU(object):
         error_indication, error_status, error_index, var_binds = \
             self._cmdgen.getCmd(community_data, udp_transport, snmp_msg)
 
-        if error_status or error_indication:
-            print "GetRequest message - {}".format(error_indication)
-        return str(var_binds[0][1])
+        if error_indication:
+            print error_indication
+
+        else:
+            if error_status:
+                print "GetRequest message: {0} at {1}".format( error_status.prettyPrint(), 
+                      error_index and var_binds[int(error_index) - 1] or "?" )
+
+            else:
+                proper_var_bind = str(var_binds[0][1])
+                return proper_var_bind
 
     def _execute_set_cmd(self, action, snmp_msg, **kwargs):
         community_data = cmdgen.CommunityData('my-agent', self._community, self._version)
@@ -39,8 +47,13 @@ class PDU(object):
         error_indication, error_status, error_index, var_binds = \
             self._cmdgen.setCmd(community_data, udp_transport, (snmp_msg, outlets_value))
 
-        if error_status or error_indication:
-            print "SetRequest message - {}".format(error_indication)
+        if error_indication:
+            print error_indication
+
+        else:
+            if error_status:
+                print "SetRequest message: {0} at {1}".format( error_status.prettyPrint(), 
+                      error_index and var_binds[int(error_index) - 1] or "?" )
 
     def set_outlet_value(self, outlet, action):
         """Set pdu outlet status.
@@ -48,7 +61,6 @@ class PDU(object):
         :param integer outlet:      Pdu outlet to be turned on.
         """
         snmp_msg = self._build_snmp_oid(outlet=outlet)
-
         self._execute_set_cmd(action, snmp_msg, outlet=outlet)
         self._check_outlet_value(action, snmp_msg, outlet=outlet)
 
@@ -64,7 +76,8 @@ class PDU(object):
 
         try:
             reversed_dict = dict((value, key) for key, value in self._outlet_status_value.iteritems())
-            return reversed_dict[self._execute_get_cmd(snmp_msg, outlet=outlet)]
+            final_index = self._execute_get_cmd(snmp_msg, outlet=outlet)
+            return reversed_dict[final_index]
         except KeyError:
             print "Outlet {} has invalid status".format(outlet)
 
@@ -84,4 +97,4 @@ class PDU(object):
             if outlet_value == self._outlet_status_value[action]:
                 return True
             time.sleep(2)
-        print "Action ({0}) on {1} was not possible.".format(action, self._host)
+        #print "Action ({0}) on {1} was not possible.".format(action, self._host)
