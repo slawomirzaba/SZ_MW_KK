@@ -20,6 +20,8 @@ from api.views.Edit_user_in_group import Edit_user_in_group
 from api.views.Edit_Group import Edit_Group
 from api.views.Edit_Pdu_Description import Edit_Pdu_Description
 from api.views.Edit_Outlet_Description import Edit_Outlet_Description
+from api.views.Login_by_REST import Login_by_REST
+
 
 urlpatterns = [
     url(r'^users/$', Listing_User.as_view(), name = 'users'),
@@ -42,4 +44,5 @@ urlpatterns = [
     url(r'^group/get_user_groups/$',  Get_user_groups.as_view(), name = 'Get_user_groups'),
     url(r'^group/edit_user_in_group/$',  Edit_user_in_group.as_view(), name = 'edit_user_in_group'),
     url(r'^group/edit_group/$',  Edit_Group.as_view(), name = 'edit_group'),
+    url(r'^login_by_rest/$', Login_by_REST.as_view(), name='login_by_rest'),
 ]
