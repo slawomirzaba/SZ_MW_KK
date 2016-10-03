@@ -31,7 +31,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class OutletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Outlet
-        fields = ('id', 'description', 'pdu')
+        fields = ('id', 'description', 'pdu', 'number')
         depth = 1
 
 class Type_user_actionSerializer(serializers.ModelSerializer):
