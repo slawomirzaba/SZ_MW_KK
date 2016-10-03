@@ -1,10 +1,10 @@
-from django.views import View
+from django.views.generic import View
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 
 
 class Login_by_REST(View):
-	
+
 	def get(self, request):
 		username = request.GET.get("username")
 		password = request.GET.get("password")
