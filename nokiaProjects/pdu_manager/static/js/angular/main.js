@@ -59,7 +59,7 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }).success(function(data, status, headers, config){
       for(var i = 0; i < data.length; ++i){
         var element = {
-          nr: Number(i + 1),
+          nr: data[i].number,
           state: "unknown",
           descr: data[i].description,
           pduId: Number(data[i].pdu.id)
