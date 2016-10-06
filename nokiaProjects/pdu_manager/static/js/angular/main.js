@@ -503,10 +503,10 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
     }
     $http({
       url: "/api/group/edit_user_in_group/",
-      data: JSON.stringify({
+      params: {
         "username" : $scope.username,
         "group_name" : group.name
-      }),
+      },
       method: "POST",
     }).success(function(data, status, headers, config){
       if(data.Succes == true){
