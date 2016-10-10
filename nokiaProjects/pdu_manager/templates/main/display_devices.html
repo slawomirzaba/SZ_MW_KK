@@ -1,4 +1,5 @@
-<div ng-repeat="pduId in filteredPdus | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit | orderBy: pduId">
+<input  ng-model="searchPdu" type="text" class="form-control" placeholder="Search Pdu device...">
+<div ng-repeat="pduId in filteredPdus | startFrom:(pagination.currentPage-1)*pagination.entryLimit | limitTo:pagination.entryLimit | pduFilter:searchPdu:arrayPdu | orderBy: pduId">
     <table class="table table-bordered pduTable">
         <tbody>
           <tr class = "headerRow">

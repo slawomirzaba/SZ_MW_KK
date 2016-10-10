@@ -18,6 +18,29 @@ pduApp.filter('startFrom', function() {
     }
 });
 
+pduApp.filter('pduFilter', function() {
+    return function(arrayIds, text, pduArray) {
+        if(text == undefined){
+          return arrayIds;
+        }
+        if(arrayIds) {
+          var filtered = [];
+          angular.forEach(pduArray, function(pdu, keyPdu){
+            for(var key in pdu.arraySlots){
+              if(pdu.name.indexOf(text) !== -1 || pdu.ip.indexOf(text) !== -1
+                || pdu.descr.indexOf(text) !== -1
+                || pdu.arraySlots[key].descr.indexOf(text) !== -1){
+                  filtered.push(Number(keyPdu));
+                  break;
+              }
+            }
+          });
+          return filtered;
+        }
+        return [];
+    }
+});
+
 pduApp.controller('mainController',['$scope', '$http', 'repository', function ($scope, $http, repository){
   $scope.descr = {
     editedPduDescrText: "",
