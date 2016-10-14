@@ -1,7 +1,4 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 import json
 
 from JSONResponse import JSONResponse
@@ -9,9 +6,6 @@ from JSONResponse import JSONResponse
 from api.models import *
 
 class Edit_user_in_group(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(Edit_user_in_group, self).dispatch(request, *args, **kwargs)
 
     def post(self,request):
         username = request.GET.get("username")

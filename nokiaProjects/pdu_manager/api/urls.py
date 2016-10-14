@@ -22,6 +22,7 @@ from api.views.Edit_Pdu_Description import Edit_Pdu_Description
 from api.views.Edit_Outlet_Description import Edit_Outlet_Description
 from api.views.Login_by_REST import Login_by_REST
 from api.views.Get_pdu_outlets import Get_pdu_outlets
+from api.views.Mobile_edit_user_groups import Mobile_edit_user_groups
 
 
 urlpatterns = [
@@ -47,4 +48,5 @@ urlpatterns = [
     url(r'^group/edit_group/$',  Edit_Group.as_view(), name = 'edit_group'),
     url(r'^login_by_rest/$', Login_by_REST.as_view(), name='login_by_rest'),
     url(r'^pdu_outlets/(?P<id>[0-9]+)/$', Get_pdu_outlets.as_view(), name='get_pdu_outlets'),
+    url(r'^group/mobile_edit_user_groups/$',  Mobile_edit_user_groups.as_view(), name = 'mobile_edit_user_groups'),
 ]
