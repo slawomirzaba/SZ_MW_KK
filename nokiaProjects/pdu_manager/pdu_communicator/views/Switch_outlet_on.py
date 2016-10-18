@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from pdu_communicator.pdu.aten import ATEN
 from main.models import User, User_action, Pdu, Outlet, Type_user_action
 
-import datetime
 
 class Switch_outlet_on(View):
     redirect_field_name = None
@@ -19,9 +18,8 @@ class Switch_outlet_on(View):
         if status == 'off':
             aten.set_outlet_value(outlet_nr, 'on')
 
-            user = request.useruser = User.objects.get(user_name=request.user.username)
+            user = User.objects.get(user_name=request.user.username)
             time = timezone.now()
-            #time = datetime.datetime.now()
             pdu_object = Pdu.objects.get(ip=pdu_ip)
             outlet_object = Outlet.objects.get(pdu=pdu_object, number=outlet_nr)
             type_object = Type_user_action.objects.get(type="on")

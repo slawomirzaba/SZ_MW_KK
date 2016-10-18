@@ -2,10 +2,9 @@ from django.utils import timezone
 from django.views.generic import View
 from django.http import JsonResponse
 from pdu_communicator.pdu.aten import ATEN
-from main.models import User_action, Pdu, Outlet, Type_user_action
+from main.models import User, User_action, Pdu, Outlet, Type_user_action
 
 import time
-import datetime
 
 class Reset_outlet(View):
     redirect_field_name = None
@@ -23,13 +22,12 @@ class Reset_outlet(View):
             time.sleep(2)
             aten.set_outlet_value(outlet_nr, 'on')
             
-            user = request.user
-            time = timezone.now()
-            #time = datetime.datetime.now()
+            user = User.objects.get(user_name=request.user.username)
+            time_ = timezone.now()
             pdu_object = Pdu.objects.get(ip=pdu_ip)
             outlet_object = Outlet.objects.get(pdu=pdu_object, number=outlet_nr)
             type_object = Type_user_action.objects.get(type="reset")
-            User_action.objects.create(time=time, user=user, outlet=outlet_object, type=type_object)
+            User_action.objects.create(time=time_, user=user, outlet=outlet_object, type=type_object)
             
             return JsonResponse({'result': True})
         return JsonResponse({'result': False})
