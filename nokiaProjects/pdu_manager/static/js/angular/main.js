@@ -395,10 +395,11 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       method: "GET",
       params: {
         pdu_ip: pdu.ip,
-        outlet_nr: slot.nr
+        outlet_nr: slot.nr,
+        username : $scope.username
       }
     }).success(function(data, status, headers, config){
-      if(data.result == true){
+      if(data.result == "on"){
         $scope.busy = false;
         slot.state = 'enabled';
         $.notify("Outlet has been enabled properly", {position: "top center", className: "success"});
@@ -406,12 +407,12 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       else
       {
         $scope.busy = false;
-        slot.state = 'enabled';
-        $.notify("Outlet is currently enabled", {position: "top center", className: "warn"});
+        slot.state = 'disabled';
+        $.notify("Activation failed. Outlet is currently disabled", {position: "top center", className: "error"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;
-      $.notify("activation failed", {position: "top center", className: "error"});
+      $.notify("Activation failed", {position: "top center", className: "error"});
       slot.state = 'unknown';
     })
   }
@@ -423,10 +424,11 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       method: "GET",
       params: {
         pdu_ip: pdu.ip,
-        outlet_nr: slot.nr
+        outlet_nr: slot.nr,
+        username : $scope.username
       }
     }).success(function(data, status, headers, config){
-      if(data.result == true){
+      if(data.result == "off"){
         $scope.busy = false;
         slot.state = 'disabled';
         $.notify("Outlet has been disabled properly", {position: "top center", className: "success"});
@@ -434,8 +436,8 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       else
       {
         $scope.busy = false;
-        slot.state = 'disabled';
-        $.notify("Outlet is currently disabled", {position: "top center", className: "warn"});
+        slot.state = 'unknown';
+        $.notify("deactivation failed. Outlet is currently disabled", {position: "top center", className: "error"});
       }
     }).error(function(data, status, headers, config){
       $scope.busy = false;
@@ -451,10 +453,11 @@ pduApp.controller('mainController',['$scope', '$http', 'repository', function ($
       method: "GET",
       params: {
         pdu_ip: pdu.ip,
-        outlet_nr: slot.nr
+        outlet_nr: slot.nr,
+        username : $scope.username
       }
     }).success(function(data, status, headers, config){
-      if(data.result == true){
+      if(data.result == "on"){
         $scope.busy = false;
         slot.state = 'enabled';
         $.notify("Outlet has been reseted properly", {position: "top center", className: "success"});

@@ -12,6 +12,7 @@ class Reset_outlet(View):
     def get(self, request):
         pdu_ip = request.GET.get("pdu_ip")
         outlet_nr = int(request.GET.get("outlet_nr"))
+        user = User.objects.get(user_name=request.GET.get("username"))
         aten = ATEN(pdu_ip, timeout=0.1)
 
         aten_oid = aten._build_snmp_oid(outlet_nr)
@@ -19,15 +20,13 @@ class Reset_outlet(View):
 
         if status == 'on':
             aten.set_outlet_value(outlet_nr, 'off')
-            time.sleep(2)
             aten.set_outlet_value(outlet_nr, 'on')
-            
-            user = User.objects.get(user_name=request.user.username)
+            time.sleep(2)
             time_ = timezone.now()
             pdu_object = Pdu.objects.get(ip=pdu_ip)
             outlet_object = Outlet.objects.get(pdu=pdu_object, number=outlet_nr)
             type_object = Type_user_action.objects.get(type="reset")
             User_action.objects.create(time=time_, user=user, outlet=outlet_object, type=type_object)
-            
-            return JsonResponse({'result': True})
-        return JsonResponse({'result': False})
+
+            return JsonResponse({'result': "on"})
+        return JsonResponse({'result': "off"})
