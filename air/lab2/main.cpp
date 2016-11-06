@@ -141,7 +141,7 @@ int main(){
   clock_t start;
   double t;
 
-  for(int i = 1; i <=4; ++i){
+  for(int i = 1; i <= 3; ++i){
     sprintf(fileName, "in%d.txt", i);
     cout << "\t\t\t" << fileName << endl;
     loadData(fileName);
