@@ -50,8 +50,10 @@ struct DisJoint{
 vector < Curve > curves;
 int nodesNumber, curvesNumber;
 DisJoint disJoint;
+
 void sortCurves();
-void loadData(string fileName);
+void loadData(char* fileName);
+int kruskal();
 
 void DisJoint::initDisJoint(int nodes){
 	Group group;
@@ -93,12 +95,12 @@ void sortCurves(){
 	sort(curves.begin(), curves.end());
 }
 
-void loadData(string fileName){
+void loadData(char* fileName){
 	ifstream file;
 	Curve curve;
 	Node node;
 
-	file.open(fileName.c_str());
+	file.open(fileName);
 	file >> nodesNumber >> curvesNumber;
 	for(int i = 0; i < curvesNumber; ++i){
 		file >> curve.firstNode >> curve.secondNode >> curve.weight;
@@ -127,11 +129,12 @@ int kruskal(){
 	return minPath;
 }
 
-int main(){
+int main(int argc, char* argv[]){
 	int min;
-
-	loadData("in1");
-	min = kruskal();
-	cout << "\nMinimalna wartość drzewa rozpinającego : " << min << endl;
+	if(argc > 1){
+		loadData(argv[1]);
+		min = kruskal();
+		cout << "\nMinimalna wartość drzewa rozpinającego : " << min << endl;
+	}
 	return 0;
 }
