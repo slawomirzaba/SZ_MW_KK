@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <algorithm> 
 #include <ctime>
 using namespace std;
 
@@ -12,7 +13,7 @@ struct Curve{
 
 	bool operator < ( const Curve& curve ) const
 	{
-		return weight < curve.weight;
+		return weight > curve.weight;
 	}
 };
 
@@ -93,7 +94,7 @@ void DisJoint::connectDisJointCollection(Curve curve){
 }
 
 void sortCurves(){
-	sort(curves.begin(), curves.end());
+	make_heap (curves.begin(), curves.end());
 }
 
 void loadData(char* fileName){
@@ -112,15 +113,16 @@ void loadData(char* fileName){
 }
 
 int kruskal(){
-	int curveIndex = 0, minPath = 0;
+	int minPath = 0;
 	Curve curve;
 
 	sortCurves();
 	for(int i = 1; i < nodesNumber; ++i){
 		do{
 
-			curve = curves[curveIndex];
-			++curveIndex;
+			curve = curves.front();
+			pop_heap (curves.begin(), curves.end()); 
+			curves.pop_back();
 
 		} while(disJoint.findRepresentant(curve.firstNode) == disJoint.findRepresentant(curve.secondNode));
 		disJoint.connectDisJointCollection(curve);

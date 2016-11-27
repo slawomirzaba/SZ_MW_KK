@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <fstream>
+#include <ctime>
 using namespace std;
 
 struct Neighbour{
@@ -94,10 +95,14 @@ int prim(){
 int main(int argc, char* argv[]){
 	int min;
 
-	if(argc > 1){
+	if(argc == 2){
 		loadData(argv[1]);
+		cout << "\nDrzewo rozpinające:\n";
+		const clock_t begin = clock();
 		min = prim();
-		cout << "\nMinimalna wartość drzewa rozpinającego : " << min << endl;
+		const float end = static_cast<float>( clock() - begin ) / CLOCKS_PER_SEC * 1000;
+		cout << "\nSuma wag w minimalnym drzewie rozpinającym: " << min << endl;
+		cout << "\nCzas wykonania: " << end << "ms" << endl << endl;
 	}
 	return 0;
 }
